@@ -12,14 +12,14 @@ class TblReportDoadorOng extends Migration
      * @return void
      */
     public function up()
-	{
-		Schema::create('tbl_report_doador_ong', function(Blueprint $table) {
-			$table->bigInteger('fk_id_doadores');
-			$table->bigInteger('fk_id_ongs');
-			$table->text('expicacao_report');
-			$table->timestamps();
-			$table->primary(['fk_id_doadores', 'fk_id_ongs']);
-		});
+	  {
+		  Schema::create('tbl_report_doador_ong', function(Blueprint $table) {
+			  $table->unsignedBigInteger('fk_id_doadores');
+			  $table->unsignedBigInteger('fk_id_ongs');
+			  $table->text('expicacao_report');
+			  $table->timestamps();
+			  $table->primary(['fk_id_doadores', 'fk_id_ongs']);
+		  });
     }
 
     /**

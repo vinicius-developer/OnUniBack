@@ -14,7 +14,7 @@ class TblTelefonesOngs extends Migration
     public function up()
 	{
 		Schema::create('tbl_telefones_ongs', function(Blueprint $table){
-			$table->bigInteger('fk_id_ong');
+			$table->unsignedBigInteger('fk_id_ong');
 			$table->string('numero_telefone', 14);
 			$table->timestamps();
 			$table->primary(['fk_id_ong', 'numero_telefone']);

@@ -14,7 +14,7 @@ class TblCausasSociais extends Migration
     public function up()
 	{
 		Schema::create('tbl_causas_sociais', function(Blueprint $table) {
-			$table->smallIncrements('id_causa_social');
+			$table->SmallIncrements('id_causa_social');
 			$table->string('nome_causa_social')->unique();
 			$table->timestamps();
 		});

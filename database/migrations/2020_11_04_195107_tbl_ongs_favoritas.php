@@ -14,10 +14,10 @@ class TblOngsFavoritas extends Migration
     public function up()
 	{
 		Schema::create('tbl_ongs_favoritas', function(Blueprint $table) {
-			$table->bigInteger('id_causa_social');
-			$table->bigInteger('nome_causa_social');
+			$table->unsignedBigInteger('fk_id_ong');
+			$table->unsignedBigInteger('fk_id_doador');
 			$table->timestamps();
-			$table->primary(['id_causa_social', 'nome_causa_social']);
+			$table->primary(['fk_id_ong', 'fk_id_doador']);
 		});
     }
 

@@ -17,3 +17,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('auth')
+	->middleware('api')
+	->namespace('App\Http\Controllers\Auth')
+	->group(function() {
+	Route::prefix('ong')->group(function() {
+		Route::post('register', 'OngController@register');
+	});
+});
+
