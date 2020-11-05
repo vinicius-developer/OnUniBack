@@ -22,7 +22,7 @@ class TblOngs extends Migration
 			$table->string('email', 80)->unique();
 			$table->string('senha', 72);
 			$table->text('descricao_ong')->nullable();
-			$table->string('rue_endereco_ong', 60);
+			$table->string('rua_endereco_ong', 60);
 			$table->smallInteger('numero_endereco_ong');
 			$table->string('bairro_endereco_ong', 30);
 			$table->string('cidade_endereco_ong', 30);

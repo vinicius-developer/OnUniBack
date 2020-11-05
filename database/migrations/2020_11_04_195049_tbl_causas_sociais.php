@@ -27,6 +27,6 @@ class TblCausasSociais extends Migration
      */
     public function down()
 	{
-		Schema::drop('tbl_causas_socias');
+		Schema::drop('tbl_causas_sociais');
     }
 }
