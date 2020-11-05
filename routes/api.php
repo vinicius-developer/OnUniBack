@@ -24,6 +24,7 @@ Route::prefix('auth')
 	->group(function() {
 	Route::prefix('ong')->group(function() {
 		Route::post('register', 'OngController@register');
+		Route::get('confirmEmail', 'OngController@confirmEmail');
 	});
 });
 
