@@ -6,7 +6,6 @@ use App\Models\On;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Utils\Tools\Validators;
-use App\Utils\Tools\sendEmail;
 use App\Utils\Api\ReceitaWs;
 use Mail;
 
@@ -14,19 +13,18 @@ class OngController extends Controller
 {
 	private $validators;
 	private $receitaWs;
-	private $Email;
 	
-	public function __construct() {
+	public function __construct() 
+	{
 		$this->validators = new Validators(); 
 		$this->receitaWs = new ReceitaWS();
-		$this->Email = new Email();
  	}
 
 	public function register(Request $request)
 	{ 
 
-		$email = $request->email;
-		$nomeFatasia = $request->nome_fantasia;
+		$ongEmail = $request->email;
+		$nomeFantasia = $request->nome_fantasia;
 		$cnpjOnlyNumbers = preg_replace('/[^0-9]/', '', (string) $request->CNPJ);
 
 		/* validação sintaxe cnpj */
@@ -41,19 +39,19 @@ class OngController extends Controller
 		} else {
 			/* validação existencia cnpj */
 
-			$response = $this->receitaWs->requestGetWs($cnpjOnlyNumbers);
+			// $response = $this->receitaWs->requestGetWs($cnpjOnlyNumbers);
 
-			if($response["situacao"] !== "ATIVA") {
-				return response()->json([
-					"status" => "Error: CPNJ não está ativo",
-					"code" => 0002
-				]);
-			}
+			// if($response["situacao"] !== "ATIVA") {
+			// 	return response()->json([
+			// 		"status" => "Error: CPNJ não está ativo",
+			// 		"code" => 0002
+			// 	]);
+			// }
 		}
 
-		/* envio email */
+		return new \App\Mail\resgiterOngsMail($ongEmail, $nomeFantasia);
 
-		$this->Email->send
+		// Mail::send(new \App\Mail\resgiterOngsMail($ongEmail, $nomeFantasia));
 
 	}
 }

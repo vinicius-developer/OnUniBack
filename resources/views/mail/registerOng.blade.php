@@ -1,3 +1,14 @@
-Obrigado por fazer parte de nossa comunidade de usuários {{ $nomeFatasia }}.
+@component('mail::message')
+    
 
-Por favor acesse esse <a href="127.0.0.1:8000/">link para continuarmos seu cadastro seu cadastro</a>  
+<h1>Obrigado por fazer parte de nossa comunidade de ongs {{ $nomeFantasia }}.</h1>
+
+ <p>
+    Todos nós recebemos vocês de braços abertos e esperamos que gostem da nossa plataforma.
+    Por favor acesse esse <a href="{{ $urlRegisterOng }}" target="_blank">link</a> para continuarmos 
+    seu cadastro seu cadastro.
+ </p>
+
+
+
+@endcomponent()

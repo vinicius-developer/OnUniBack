@@ -19,7 +19,8 @@ class TblDoadores extends Migration
 			$table->string('sobrenome_doador', 50);
 			$table->string('email', 80)->unique();
 			$table->string('senha', 72);
-			$table->string('img_perfil', 80);
+      $table->string('img_perfil', 80);
+      $table->enum('status', ['true', 'false']);
 			$table->timestamps('');
 		});
     }

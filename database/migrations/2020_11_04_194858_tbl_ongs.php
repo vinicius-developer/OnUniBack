@@ -28,6 +28,7 @@ class TblOngs extends Migration
 			$table->string('cidade_endereco_ong', 30);
 			$table->char('uf_endereco_ong', 2);
 			$table->string('img_perfil', 80); //disposto a mudança
+			$table->enum('status', ['true', 'false']);
 			$table->timestamps();
 		});
     }
