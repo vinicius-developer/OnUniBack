@@ -16,9 +16,9 @@ class TblOngs extends Migration
 		Schema::create('tbl_ongs', function (Blueprint $table){
 			$table->bigIncrements('id_ong');
 			$table->unsignedSmallInteger('fk_id_causa_social');
-			$table->char('CNPJ', 18)->unique();
-			$table->string('nome_fantasia', 80)->unique();
-			$table->string('razao_social', 80)->unique();
+			$table->char('cnpj', 18)->unique();
+			$table->string('nome_fantasia', 80);
+			$table->string('razao_social', 80);
 			$table->string('email', 80)->unique();
 			$table->string('senha', 72);
 			$table->text('descricao_ong')->nullable();

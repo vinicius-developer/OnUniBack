@@ -36,6 +36,7 @@ class OngController extends Controller
 				"status" => "Error: CNPJ inválido",
 				"code" => 0001
 			]);
+		
 		} else {
 			/* validação existencia cnpj */
 
