@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TblTelefoneOngsFkIdOngForeign extends Migration
+class TblTelefones extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,12 @@ class TblTelefoneOngsFkIdOngForeign extends Migration
      * @return void
      */
     public function up()
-	{
-		Schema::table('tbl_telefones_ongs', function(Blueprint $table){
-			$table->foreign('fk_id_ong')->references('id_ong')->on('tbl_ongs');
-		});
+    {
+        Schema::create('tbl_telefones', function(Blueprint $table) {
+            $table->bigIncrements('id_telefones');
+            $table->string('numero_telefone', 14);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,8 +27,6 @@ class TblTelefoneOngsFkIdOngForeign extends Migration
      */
     public function down()
     {
- 		Schema::table('tbl_telefones_ongs', function(Blueprint $table){
-			$table->dropForeign('tbl_telefones_ongs_fk_id_ong_foreign');
-		});     
+        Schema::drop('tbl_telefones');
     }
 }

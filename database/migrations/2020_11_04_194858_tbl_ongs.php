@@ -14,19 +14,14 @@ class TblOngs extends Migration
     public function up()
 	{
 		Schema::create('tbl_ongs', function (Blueprint $table){
-			$table->bigIncrements('id_ong');
-			$table->unsignedSmallInteger('fk_id_causa_social');
+			$table->increments('id_ongs');
+			$table->unsignedSmallInteger('id_causas_sociais');
 			$table->char('cnpj', 18)->unique();
 			$table->string('nome_fantasia', 80);
 			$table->string('razao_social', 80);
 			$table->string('email', 80)->unique();
 			$table->string('senha', 72);
-			$table->text('descricao_ong')->nullable();
-			$table->string('rua_endereco_ong', 60);
-			$table->smallInteger('numero_endereco_ong');
-			$table->string('bairro_endereco_ong', 30);
-			$table->string('cidade_endereco_ong', 30);
-			$table->char('uf_endereco_ong', 2);
+			$table->text('descricao_ong');
 			$table->string('img_perfil', 80); //disposto a mudança
 			$table->enum('status', ['true', 'false']);
 			$table->timestamps();

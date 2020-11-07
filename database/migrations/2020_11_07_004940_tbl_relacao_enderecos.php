@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TblReportDoadorOngFkIdOngForeign extends Migration
+class TblRelacaoEnderecos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class TblReportDoadorOngFkIdOngForeign extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_report_doador_ong', function(Blueprint $table){
-			$table->foreign('fk_id_ongs')->references('id_ong')->on('tbl_ongs');
-		});
+        Schema::create('tbl_relacao_enderecos', function(Blueprint $table) {
+            $table->increments('id_relacao_enderecos');
+            $table->unsignedInteger('id_enderecos');
+            $table->unsignedInteger('id_ongs');
+        });
     }
 
     /**
@@ -25,8 +27,6 @@ class TblReportDoadorOngFkIdOngForeign extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_report_doador_ong', function(Blueprint $table){
-			$table->dropForeign('tbl_report_doador_ong_fk_id_ongs_foreign');
-		}); 
+        Schema::drop('tbl_relacao_enderecos');
     }
 }

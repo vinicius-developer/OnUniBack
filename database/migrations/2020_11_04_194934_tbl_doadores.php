@@ -14,13 +14,13 @@ class TblDoadores extends Migration
     public function up()
 	{
 		Schema::create('tbl_doadores', function(Blueprint $table) {
-			$table->bigIncrements('id_doadores');
-			$table->string('nome_doador', 30);
-			$table->string('sobrenome_doador', 50);
+			$table->increments('id_doadores');
+			$table->string('nome', 30);
+			$table->string('sobrenome', 50);
 			$table->string('email', 80)->unique();
 			$table->string('senha', 72);
-      $table->string('img_perfil', 80);
-      $table->enum('status', ['true', 'false']);
+      		$table->string('img_perfil', 80);
+      		$table->enum('status', ['true', 'false']);
 			$table->timestamps('');
 		});
     }

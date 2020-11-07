@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TblOngsFkIdCausaSocialForeign extends Migration
+class TblReports extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class TblOngsFkIdCausaSocialForeign extends Migration
      */
     public function up()
     {
-		Schema::table('tbl_ongs', function(Blueprint $table){
-			$table->foreign('fk_id_causa_social')->references('id_causa_social')->on('tbl_causas_sociais');
-		});
+        Schema::create('tbl_reports', function(Blueprint $table) {
+            $table->increments('id_reports');
+            $table->text('explicacao');
+            $table->enum('tipo_usuario_reportado', ['ong', 'doador']);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -24,9 +27,7 @@ class TblOngsFkIdCausaSocialForeign extends Migration
      * @return void
      */
     public function down()
-	{
-		Schema::table('tbl_ongs', function(Blueprint $table){
-			$table->dropForeign('tbl_ongs_fk_id_causa_social_foreign');
-		});
+    {
+        Schema::drop('tbl_reports');
     }
 }
