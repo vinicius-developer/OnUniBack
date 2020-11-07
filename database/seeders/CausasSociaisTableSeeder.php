@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\CausasSociais;
+use App\Models\CausaSocial;
 
 class CausasSociaisTableSeeder extends Seeder
 {
@@ -14,19 +14,19 @@ class CausasSociaisTableSeeder extends Seeder
      */
     public function run()
     {
-        CausasSociais::create([
+        CausaSocial::create([
             'nome_causa_social' => 'Auxílio a desabrigados'
         ]);
 
-        CausasSociais::create([
+        CausaSocial::create([
             'nome_causa_social' => 'Auxílio a crianças'
         ]);
 
-        CausasSociais::create([
+        CausaSocial::create([
             'nome_causa_social' => 'Cuidados a deficientes fisícos'
         ]);
 
-        CausasSociais::create([
+        CausaSocial::create([
             'nome_causa_social' => 'Auxílio a idosos'
         ]);
     }
