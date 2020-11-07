@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OngsFavoritas extends Model
+class Doador extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbl_ongs_favoritas';
-    protected $primaryKey = ['fk_id_doador', 'dk_id_ong'];
+    protected $table = 'tbl_doadores';
+    protected $primaryKey = 'id_doadores';
 }

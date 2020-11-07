@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CausasSociais extends Model
+class OngFavorita extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbl_causas_sociais';
-    protected $primaryKey = 'id_causa_social';
+    protected $table = 'tbl_ongs_favoritas';
+    protected $primaryKey = 'id_ongs_favoritas';
 }
