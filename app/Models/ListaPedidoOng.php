@@ -11,4 +11,23 @@ class ListaPedidoOng extends Model
 
     protected $table = 'tbl_listas_pedidos_ongs';
     protected $primaryKey = 'id_listas_pedidos_ongs';
+
+    protected $fillable = [
+        'id_ongs',
+        'nome_item',
+    ];
+
+    protected $guarded = [
+        'id_listas_pedidos_ongs',
+        'updated_at',
+        'created_at'
+    ];
+
+    public function ong() 
+    {
+        return $this->belongsTo(Ong::class, 'id_ongs', 'id_ongs');
+    }
+   
+
+
 }

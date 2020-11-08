@@ -26,7 +26,7 @@ class TblRelacaoTelefonesIdTelefonesForeign extends Migration
     public function down()
     {
         Schema::table('tbl_relacao_telefones', function(Blueprint $table) {
-            $table->dropForeign('id_relacao_telefones_id_telefones_foreign');
+            $table->dropForeign('tbl_relacao_telefones_id_telefones_foreign');
         });
     }
 }

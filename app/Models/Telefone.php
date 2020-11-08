@@ -12,4 +12,17 @@ class Telefone extends Model
     protected $table = 'tbl_telefones';
     protected $primaryKey = 'id_telefones';
 
+    protected $fillable = ['numero_telefone'];
+
+    protected $guarded = [
+        'id_telefones',
+        'updated_at',
+        'created_at'
+    ];
+
+    public function relacaoTelefone()
+    {
+        return $this->hasOne(Telefone::class, 'id_telefones', 'id_telefones');
+    }
+
 }

@@ -11,4 +11,20 @@ class Report extends Model
 
     protected $table = 'tbl_reports';
     protected $primaryKey = 'id_reports';
+
+    protected $fillable = [
+        'explicaco',
+        'tipo_usuario_report',
+    ];
+
+    protected $guarded = [
+        'id_reports',
+        'created_at',
+        'updated_at'
+    ];
+
+    public function relacaoReport()
+    {
+        return $this->hasOne(Report::class, 'id_reports', 'id_reports');
+    } 
 }

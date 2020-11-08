@@ -17,6 +17,7 @@ class TblEnderecos extends Migration
             $table->increments('id_enderecos');
             $table->string('rua', 40);
             $table->unsignedSmallInteger('numero');
+            $table->string('complemento', 25)->nullable;
             $table->string('cidade', 40);
             $table->string('bairro', 40);
             $table->char('uf', 2);

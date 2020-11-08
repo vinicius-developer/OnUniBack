@@ -11,4 +11,25 @@ class Endereco extends Model
 
     protected $table = 'tbl_enderecos';
     protected $primaryKey = 'id_enderecos';
+
+    protected $fillable = [
+        'rua',
+        'numero',
+        'complemento',
+        'cidade',
+        'bairro',
+        'uf'
+    ];
+
+    protected $guarded = [
+        'id_enderecos',
+        'created_at',
+        'updated_at'
+    ];
+
+    public function relacaoEndereco() 
+    {
+        return $this->hasOne(RelacaoEndereco::class, 'id_doadores', 'id_doadores');
+    }
+
 }
