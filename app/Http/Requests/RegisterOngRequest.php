@@ -24,20 +24,33 @@ class RegisterOngRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_causas_requires' => 'required | numeric',
-            'cnpj' => 'required | max:18',
-            'nome_fantasia' => 'required | max:80',
-            'razao_social' => 'required | max:80',
-            'email' => 'required | max:80',
-            'senha' => 'required' ,
-            'descricao' => 'required | max:65.535',
-            'rua' => 'required | max:40',
-            'numero' => 'required | numeric',
-            'complemento' => 'required | max:25',
-            'cidade' => 'required | max:40',
-            'bairro' => 'required | max:40',
-            'uf' => 'required | max:2 | min:2',
-            'telefone' => 'required'
+            'causa_social' => 'required|integer',
+            'cnpj' => 'required|cnpj|unique:tbl_ongs',
+            'nome_fantasia' => 'required|max:80',
+            'razao_social' => 'required|max:80',
+            'email' => 'required|max:80|confirmed|email:rfc,dns|unique:tbl_ongs',
+            'senha' => 'required|confirmed',
+            'descricao' => 'required|max:65535',
+            'rua' => 'required|max:40',
+            'cep' => 'required|formato_cep',
+            'numero' => 'required|integer',
+            'complemento' => 'max:25',
+            'cidade' => 'required|max:40',
+            'bairro' => 'required|max:40',
+            'uf' => 'required|max:2|min:2',
+            'telefones' => 'required'
+        ];
+    }
+
+    public function messages() {
+        return [
+            'cnpj.cnpj' => 'O campo CNPJ é inválido',
+            'cep.formato_cep' => 'O campo CEP é inválido',
+            'email.unique' => 'Esse e-mail já foi cadastrado em nosso sistema',
+            'cnpj.unique' => [
+                "comment" => 'O CNPJ da sua ong já está cadastrado em nosso sitema, caso necessário entre em contato conosco',
+                "contact" => 'onuniContato@gmail.com'
+            ]
         ];
     }
 }

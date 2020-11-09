@@ -9,27 +9,27 @@ class Endereco extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbl_enderecos';
-    protected $primaryKey = 'id_enderecos';
+    protected $table = "tbl_enderecos";
+    protected $primarykey = 'id_enderecos';
 
     protected $fillable = [
+        'id_ongs',
         'rua',
+        'cep',
         'numero',
-        'complemento',
-        'cidade',
         'bairro',
+        'cidade',
+        'complemento',
         'uf'
     ];
 
     protected $guarded = [
         'id_enderecos',
-        'created_at',
-        'updated_at'
+        'updated_at',
+        'created_at'
     ];
 
-    public function relacaoEndereco() 
-    {
-        return $this->hasOne(RelacaoEndereco::class, 'id_doadores', 'id_doadores');
+    public function ong() {
+        return $this->belongsTo(Ong::class, 'id_ongs', 'id_ongs');
     }
-
 }

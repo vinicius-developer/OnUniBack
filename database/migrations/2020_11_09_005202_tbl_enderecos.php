@@ -15,9 +15,11 @@ class TblEnderecos extends Migration
     {
         Schema::create('tbl_enderecos', function(Blueprint $table) {
             $table->increments('id_enderecos');
+            $table->unsignedInteger('id_ongs');
             $table->string('rua', 40);
+			$table->string('cep', 10);
             $table->unsignedSmallInteger('numero');
-            $table->string('complemento', 25)->nullable;
+            $table->string('complemento', 25)->nullable();
             $table->string('cidade', 40);
             $table->string('bairro', 40);
             $table->char('uf', 2);

@@ -20,7 +20,8 @@ class Ong extends Model
         'email', 
         'senha', 
         'descricao_ong', 
-        'img_perfil'];
+        'img_perfil'
+    ];
 
     protected $guarded = [ 
         'id_ongs',
@@ -44,9 +45,9 @@ class Ong extends Model
         return $this->hasMany(ListaPedidoOng::class, 'id_ongs', 'id_ongs');
     }
 
-    public function relacaoEnderecos()
+    public function endereco() 
     {
-        return $this->hasMany(RelacaoEndereco::class, 'id_ongs', 'id_ongs');
+        return $this->hasMany(Enderecos::class. 'id_ongs', 'id_ongs');
     }
 
     public function relacaoReport()

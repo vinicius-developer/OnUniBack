@@ -3,103 +3,89 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\Ong;
+use App\Models\Endereco;
+use App\Models\Telefone;
+use App\Models\RelacaoTelefone;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-//use App\Http\Request\RegisterOngRequest;
-use App\Utils\Tools\Validators;
+use App\Http\Requests\RegisterOngRequest;
 use App\Utils\Api\ReceitaWs;
 use App\Email\registerOngEmail;
 use Mail;
 
 class OngController extends Controller
 {
-	private $validators;
 	private $receitaWs;
 	private $ong;
 	
 	public function __construct() 
 	{
-		$this->validators = new Validators(); 
 		$this->receitaWs = new ReceitaWS();
 		$this->ong = new Ong();
  	}
 
-	public function register(Request $request)
+	public function register(RegisterOngRequest $request)
 	{
-		$validRequest = $request->validate([
-			'id_causas_requires' => 'required',
-            'cnpj' => 'required',
-            'nome_fantasia' => 'required',
-            'razao_social' => 'required',
-            'email' => 'required',
-            'senha' => 'required' ,
-            'descricao' => 'required',
-            'rua' => 'required',
-            'numero' => 'required',
-            'complemento' => 'required',
-            'cidade' => 'required',
-            'bairro' => 'required',
-            'uf' => 'required',
-            'telefone' => 'required'
-		]);
+		$tbl_ongs = $this->ong;
+		$tbl_enderecos = new Endereco();
+		$tbl_telefones = new Telefone();
+		$tbl_relacao_tefones = new RelacaoTelefone();
 
 		$cnpjOnlyNumbers = preg_replace('/[^0-9]/', '', (string) $request->cnpj);
-		$validatorCnpj = $this->validators->validatorCnpj($cnpjOnlyNumbers);
 
-		$cnpjExists = $this->ong->where('cnpj', $request->cnpj)->exists();
+		// $response = $this->receitaWs->requestGetWs($cnpjOnlyNumbers);
+		// if($response["situacao"] !== "ATIVA") {
+		// 	return response()->json([
+		// 		"message" => "The given data was invalid",
+		//		"errors" => [
+		//			"cnpj": [					
+		//              "Esse Cnpj não está ativo"	
+		//          ]
+		//	    ]
+		// 	]);
+		// }
 
-		$emailExists = $this->ong->where('email', $request->email)->exists();
+		$tbl_ongs->id_causas_sociais = $request->causa_social;
+		$tbl_ongs->cnpj = $request->cnpj;
+		$tbl_ongs->nome_fantasia = $request->nome_fantasia;
+        $tbl_ongs->razao_social = $request->razao_social;
+		$tbl_ongs->email = $request->email;
+		$tbl_ongs->senha = bcrypt($request->senha);
+		$tbl_ongs->descricao_ong = $request->descricao;
+		$tbl_ongs->img_perfil = 'pothoPerfilOng/fotoOngPadrao.png';
+		$createOng = $tbl_ongs->save();
 
+		$tbl_enderecos->id_ongs = $tbl_ongs->id_ongs;
+		$tbl_enderecos->rua = $request->rua;
+		$tbl_enderecos->cep = $request->cep;			
+		$tbl_enderecos->numero = $request->numero;			
+		$tbl_enderecos->complemento = $request->complemento;
+		$tbl_enderecos->cidade = $request->cidade;
+		$tbl_enderecos->bairro = $request->bairro;
+		$tbl_enderecos->uf = $request->uf;
+		$createEndereco = $tbl_enderecos->save();
 
-		if(!$validatorCnpj) {
-			return response()->json([
-				"status" => 'error',
-				"message" => "CNPJ inválido",
-			]);
-		} else if($cnpjExists) {
-			return response()->json([
-				"status" => "error",
-				"message" => "O CNPJ da sua ong já está cadastrado em nosso sitema, por favor entre em contado conosco para resolvermos o problema",
-				"contact" => "onuniContato@gmail.com", /* só para teste */
-			]);
-		} else {
-			// $response = $this->receitaWs->requestGetWs($cnpjOnlyNumbers);
+		foreach($request->telefones as $telefone) {
+			$tbl_telefones->numero_telefone = $telefone;
+			$tbl_telefones->save();
 
-			// if($response["situacao"] !== "ATIVA") {
-			// 	return response()->json([
-			// 		"message" => "Error: CPNJ não está ativo",
-			// 		"code" => 0002
-			// 	]);
-			// }
+			$tbl_relacao_telefones->id_doadores = '';
+			$tbl_relacao_telefones->id_ongs = $tbl_ongs->id_ongs;
+			$tbl_relacao_telefones->id_telefones = $tbl_telefones->id_telefones;
+			$tbl_relacao_telefones->save();
 		}
 
-		if($emailExists)
-			return response()->json([
-				"status" => "error",
-				"message" => "Esse e-mail já foi cadastrado em nosso sistema"
-			]);
+		
 
-		$resultCreateRegister = $this->ong->create([
-			'id_causas_sociais' => $request->id_causas_sociais,
-			'cnpj' => $request->cnpj,
-			'nome_fantasia' => $request->nome_fantasia,
-			'razao_social' => $request->razao_social,
-			'email' => $request->email,
-			'senha' => bcrypt($request->senha),
-			'descricao_ong' => $request->descricao,
-			'img_perfil' => $request->file()['img']->store("pothoPerfilOng"),
-		]);
-
-		if($resultCreateRegister) {
+		if($createOng) {
 			//Mail::send(new \App\Mail\resgiterOngsMail($request->email, $request->nome_fantasia));
 			return response()->json([
-				"status" => "sucesso",
 				"message" => 'Sua conta foi criado com secesso por favor verifique se email',
+				"errors" => [],
 			]);
 		} else {
 			return response()->json([
-				"status" => "error",
 				"message" => 'Não foi possível concluir o cadastro',
+				"errors" => [],
 			]);
 		}
 

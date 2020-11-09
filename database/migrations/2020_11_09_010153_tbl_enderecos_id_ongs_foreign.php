@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TblRelacaoEnderecosIdEnderecos extends Migration
+class TblEnderecosIdOngsForeign extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class TblRelacaoEnderecosIdEnderecos extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_relacao_enderecos', function(Blueprint $table) {
-            $table->foreign('id_enderecos')->references('id_enderecos')->on('tbl_enderecos');
+        Schema::table('tbl_enderecos', function(Blueprint $table) {
+            $table->foreign('id_ongs')->references('id_ongs')->on('tbl_ongs');
         });
     }
 
@@ -25,8 +25,8 @@ class TblRelacaoEnderecosIdEnderecos extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_relacao_enderecos', function(Blueprint $table) {
-            $table->dropForeign('tbl_relacao_enderecos_id_enderecos_foreign');
+        Schema::table('tbl_enderecos', function(Blueprint $table) {
+            $table->dropForeign('tbl_enderecos_id_ongs_foreign');
         });
     }
 }

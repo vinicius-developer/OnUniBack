@@ -15,7 +15,7 @@ class TblTelefones extends Migration
     {
         Schema::create('tbl_telefones', function(Blueprint $table) {
             $table->bigIncrements('id_telefones');
-            $table->string('numero_telefone', 14);
+            $table->string('numero_telefone', 15);
             $table->timestamps();
         });
     }

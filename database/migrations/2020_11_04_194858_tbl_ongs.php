@@ -23,6 +23,7 @@ class TblOngs extends Migration
 			$table->string('senha', 72);
 			$table->text('descricao_ong');
 			$table->string('img_perfil', 80); //disposto a mudança
+            
 			$table->enum('status', ['false', 'true']);
 			$table->timestamps();
 		});
