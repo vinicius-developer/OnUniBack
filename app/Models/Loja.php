@@ -10,7 +10,7 @@ class Loja extends Model
     use HasFactory;
 
     protected $table = 'tbl_lojas';
-    protected $keyType = 'id_lojas';
+    protected $primaryKey = 'id_lojas';
 
     protected $filllable = [
         'nome_loja',
