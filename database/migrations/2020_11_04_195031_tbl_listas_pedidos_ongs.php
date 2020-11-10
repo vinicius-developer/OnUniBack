@@ -15,7 +15,8 @@ class TblListasPedidosOngs extends Migration
 	{
 		Schema::create('tbl_listas_pedidos_ongs', function(Blueprint $table) {
 			$table->bigIncrements('id_listas_pedidos_ongs');
-			$table->unsignedInteger('id_ongs');
+			$table->string('id_ongs', 32);
+			$table->unsignedInteger('id_lojas');
 			$table->string('nome_item', 40);
 			$table->timestamps();
 			

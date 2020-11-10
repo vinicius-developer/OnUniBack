@@ -15,8 +15,8 @@ class TblOngsFavoritas extends Migration
 	{
 		Schema::create('tbl_ongs_favoritas', function(Blueprint $table) {
         	$table->bigIncrements('id_ongs_favoritas');
-			$table->unsignedInteger('id_ongs');
-			$table->unsignedInteger('id_doadores');
+			$table->string('id_ongs', 32);
+			$table->string('id_doadores', 32);
 			$table->timestamps();
 		});
     }

@@ -22,6 +22,8 @@ class RelacaoTelefone extends Model
         'id_relacao_telefones'
     ];
 
+    public $timestamps = false;
+
     public function doador() 
     {
         return $this->belongTo(Doador::class, 'id_doadores', 'id_doadores');

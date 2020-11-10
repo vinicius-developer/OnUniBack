@@ -14,7 +14,7 @@ class TblOngs extends Migration
     public function up()
 	{
 		Schema::create('tbl_ongs', function (Blueprint $table){
-			$table->increments('id_ongs');
+			$table->string('id_ongs', 32)->primary();
 			$table->unsignedSmallInteger('id_causas_sociais');
 			$table->char('cnpj', 18)->unique();
 			$table->string('nome_fantasia', 80);
@@ -23,7 +23,6 @@ class TblOngs extends Migration
 			$table->string('senha', 72);
 			$table->text('descricao_ong');
 			$table->string('img_perfil', 80); //disposto a mudança
-            
 			$table->enum('status', ['false', 'true']);
 			$table->timestamps();
 		});

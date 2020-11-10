@@ -15,7 +15,7 @@ class TblEnderecos extends Migration
     {
         Schema::create('tbl_enderecos', function(Blueprint $table) {
             $table->increments('id_enderecos');
-            $table->unsignedInteger('id_ongs');
+            $table->string('id_ongs', 32);
             $table->string('rua', 40);
 			$table->string('cep', 10);
             $table->unsignedSmallInteger('numero');

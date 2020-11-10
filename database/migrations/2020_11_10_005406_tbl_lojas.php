@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TblRelacaoReports extends Migration
+class TblLojas extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class TblRelacaoReports extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_relacao_reports', function(Blueprint $table) {
-            $table->bigIncrements('id_relacao_reports');
-            $table->string('id_doadores', 32);
-            $table->string('id_ongs', 32);
-            $table->unsignedInteger('id_reports');
+        Schema::create('tbl_lojas', function(Blueprint $table) {
+            $table->increments('id_lojas');
+            $table->string('nome_fantasia_loja', 60);
+            $table->string('link_loja', 100);
+            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ class TblRelacaoReports extends Migration
      */
     public function down()
     {
-        Schema::drop('tbl_relacao_reports');
+        Schema::drop('tbl_lojas');
     }
 }

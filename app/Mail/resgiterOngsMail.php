@@ -13,16 +13,18 @@ class resgiterOngsMail extends Mailable
 
     public $email;
     public $name;
+    public $id;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email, $name)
+    public function __construct($email, $name, $id)
     {
         $this->email = $email;
         $this->name = $name;
+        $this->id = $id;
     }
 
     /**
@@ -32,12 +34,14 @@ class resgiterOngsMail extends Mailable
      */
     public function build()
     {
+        $url = 'http://127.0.0.1:8000/api/auth/ong/activate/' . $this->id;
+
         $this->from('onuniapi@gmail.com', 'OnUni');
         $this->subject('Confirmação de conta OnUni');
         $this->to($this->email, $this->name);
         return $this->markdown('mail.registerOng', [
             'nomeFantasia' => $this->name,
-            'urlRegisterOng' => "https://www.youtube.com/watch?v=exPc4kmJOrM&t=399s"
+            'urlRegisterOng' => $url
         ]);
     }
 }

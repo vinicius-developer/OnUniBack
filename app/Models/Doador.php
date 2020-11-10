@@ -27,6 +27,10 @@ class Doador extends Model
         'updated_at'
     ];
 
+    public $incrementing = false;
+    public $keyType = 'string';
+
+
     public function ongFavorita() 
     {
         return $this->hasMany(OngFavorita::class, 'id_doadores', 'id_doadores');

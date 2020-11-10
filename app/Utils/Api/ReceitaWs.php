@@ -8,8 +8,9 @@ class ReceitaWs {
 
     public function requestGetWs($cnpj) {
 
+		$cnpjOnlyNumbers = preg_replace('/[^0-9]/', '', (string) $cnpj);
 
-        $reponse = Http::get('https://www.receitaws.com.br/v1/cnpj/'. $cnpj);
+        $reponse = Http::get('https://www.receitaws.com.br/v1/cnpj/'. $cnpjOnlyNumbers);
 
         return $reponse->json();
 

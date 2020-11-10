@@ -20,7 +20,7 @@ class CausaSocial extends Model
         'updated_at'
     ];
 
-    public function ong() 
+        public function ong() 
     {
         return $this->hasMany(Ongs::class, 'id_causa_social', 'id_causa_social');
     }

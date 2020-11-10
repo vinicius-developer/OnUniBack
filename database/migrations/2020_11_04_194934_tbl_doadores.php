@@ -14,7 +14,7 @@ class TblDoadores extends Migration
     public function up()
 	{
 		Schema::create('tbl_doadores', function(Blueprint $table) {
-			$table->increments('id_doadores');
+			$table->string('id_doadores', 32)->primary();
 			$table->string('nome', 30);
 			$table->string('sobrenome', 50);
 			$table->string('email', 80)->unique();

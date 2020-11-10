@@ -30,6 +30,9 @@ class Ong extends Model
         'updated_at' 
     ];
 
+    public $incrementing = false;
+    public $keyType = 'string';
+
     public function causaSocial() 
     {
         return $this->belongsTo(CausaSocial::class, /* fk */'id_causa_social', /* pk */ 'id_causa_social');

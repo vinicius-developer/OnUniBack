@@ -16,8 +16,8 @@ class TblRelacaoTelefones extends Migration
         Schema::create('tbl_relacao_telefones', function(Blueprint $table) {
             $table->bigIncrements('id_relacao_telefones');
             $table->unsignedBigInteger('id_telefones');
-            $table->unsignedInteger('id_doadores')->nullable();
-            $table->unsignedInteger('id_ongs')->nullable();
+            $table->string('id_doadores', 32)->nullable();
+            $table->string('id_ongs', 32)->nullable();
         });
     }
 

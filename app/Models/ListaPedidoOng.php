@@ -27,7 +27,10 @@ class ListaPedidoOng extends Model
     {
         return $this->belongsTo(Ong::class, 'id_ongs', 'id_ongs');
     }
-   
 
+    public function loja() 
+    {
+        return $this->belongsTo(ListaPedidosOng::class, 'id_ongs', 'id_ongs');
+    }
 
 }
