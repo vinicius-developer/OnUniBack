@@ -6,10 +6,11 @@ use App\Models\Ong;
 use App\Models\Endereco;
 use App\Models\Telefone;
 use App\Models\RelacaoTelefone;
+use App\Http\Requests\Ong\RegisterOngRequest;
+use App\Http\Requests\Ong\LoginOngRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterOngRequest;
 use App\Utils\Api\ReceitaWs;
-use App\Email\registerOngEmail;
+use App\Utils\Tools\GenerateJWT;
 use Mail;
 
 class OngController extends Controller
@@ -108,7 +109,8 @@ class OngController extends Controller
 
 	}
 	
-	public function activate($id) {
+	public function activate($id) 
+	{
 		$tbl_ongs = $this->ong->select('*')->where('id_ongs','=', $id)->first();
 
 		$tbl_ongs->status = 'true';
@@ -125,7 +127,44 @@ class OngController extends Controller
 				"errors" => [
 					"Estamos com algum problema em nosso sistema"
 				],
+
 			]);
 		}
+	}
+
+	public function login(LoginOngRequest $request) 
+	{
+
+		$user = $this->ong->select('*')->where('email', '=', $request->email)->first();
+
+		if(!$user || crypt($request->senha, $user->senha) !== $user->senha) {
+			return response()->json([
+				"message" => 'As informações inseridas estão incorretas ou não estão cadastrados em nosso sitema',
+				"errors" => [
+					"Unauthorized" => 401
+				]
+			]);
+		}
+
+
+
+		$jwt = new GenerateJWT();
+		$header = [
+			'typ' => 'jwt', 
+			'alg' => 'HS256'
+		];
+		$payload = [
+			'sub' => $user->id_ongs,
+			'exp' => intval(date("U")) + 86400,
+			'type' => 'ong',
+			'email' => $user->email
+		];
+		$signature = "pao";
+
+
+
+		$key = $jwt->resultKey($header, $payload, $signature);
+
+		return $key;
 	}
 }
