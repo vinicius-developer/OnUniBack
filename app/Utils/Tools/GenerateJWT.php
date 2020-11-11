@@ -4,6 +4,13 @@ namespace App\Utils\Tools;
 
 class GenerateJWT 
 {
+    protected $baseUrl64;
+
+    public function __construct() 
+    {
+        $this->baseUrl64 = new BaseUrl64;
+    }
+
     public function resultKey($header, $payload, $signature) 
     {
         if(!is_array($header) || !is_array($payload) || !is_string($signature)) {
@@ -16,7 +23,7 @@ class GenerateJWT
         $hashPayload = $this->hashObjects($payload);
         $hashSignature = $this->shaSignature($hashHeader, $hashPayload, $signature);
 
-        $jwt = $hashHeader. '.' .$hashPayload. '.' .$hashSignature;
+        $jwt = $hashHeader . '.' . $hashPayload. '.' . $hashSignature;
 
         return $jwt;
     }
@@ -24,7 +31,7 @@ class GenerateJWT
     protected function hashObjects($infos)
     {
         $hash = json_encode($infos);
-        $hash = $this->baseurl64_encode($hash);
+        $hash = $this->baseUrl64->encode($hash);
 
         return $hash;
     }
@@ -32,25 +39,8 @@ class GenerateJWT
     protected function shaSignature($header, $payload, $signature) 
     {
         $sha = hash_hmac('sha256', $header.$payload, $signature, true);
-        $result = $this->baseurl64_encode($sha);
+        $result = $this->baseUrl64->encode($sha);
 
         return $result;
     }
-
-    protected function baseurl64_encode($hash) 
-    {
-        $url = base64_encode($hash);
-
-        $url = strtr($url, '/+', '-');
-
-        return rtrim($url, '=');
-    }
-
-    protected function baseurl64_decode($hash) 
-    {
-        $b64 = strtr($hash, '-_', '+/');
-
-        return base64_decode($b64, $strict);
-    }
-
 }

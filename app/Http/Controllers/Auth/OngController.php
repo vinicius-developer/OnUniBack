@@ -93,7 +93,7 @@ class OngController extends Controller
 
 		if($createOng && $createEndereco) {
 			//Mail::send(new \App\Mail\resgiterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
-			Mail::send(new \App\Mail\resgiterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
+			//Mail::send(new \App\Mail\resgiterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
 			return response()->json([
 				"message" => 'Sua conta foi criado com sucesso por favor verifique o email da ong que está cadastrado no CNPJ',
 				"errors" => [],
@@ -159,7 +159,7 @@ class OngController extends Controller
 			'type' => 'ong',
 			'email' => $user->email
 		];
-		$signature = "pao";
+		$signature = $_ENV['JWT_SECRET'];
 
 
 
