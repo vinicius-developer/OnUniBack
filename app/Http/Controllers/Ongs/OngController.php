@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Ongs;
 
+use App\Http\Controllers\Controller;
 use App\Models\Ong;
 use App\Models\Endereco;
 use App\Models\Telefone;
 use App\Models\RelacaoTelefone;
 use App\Http\Requests\Ong\RegisterOngRequest;
 use App\Http\Requests\Ong\LoginOngRequest;
-use App\Http\Controllers\Controller;
 use App\Utils\Api\ReceitaWs;
-use App\Utils\Tools\GenerateJWT;
+use App\Utils\Tools\JWTWrapper;
 use Mail;
 
 class OngController extends Controller
@@ -135,7 +135,10 @@ class OngController extends Controller
 	public function login(LoginOngRequest $request) 
 	{
 
-		$user = $this->ong->select('*')->where('email', '=', $request->email)->first();
+		$user = $this->ong->select('*')
+							->where('email', '=', $request->email)
+							->where('status', '<>', 'false')
+							->first();
 
 		if(!$user || crypt($request->senha, $user->senha) !== $user->senha) {
 			return response()->json([
@@ -146,25 +149,24 @@ class OngController extends Controller
 			]);
 		}
 
-
-
-		$jwt = new GenerateJWT();
-		$header = [
-			'typ' => 'jwt', 
-			'alg' => 'HS256'
-		];
-		$payload = [
+		$jwt = JWTWrapper::encode([
+			'expiration_sec' => 43200,
+			'iss' => $user->email,
 			'sub' => $user->id_ongs,
-			'exp' => intval(date("U")) + 86400,
-			'type' => 'ong',
-			'email' => $user->email
-		];
-		$signature = $_ENV['JWT_SECRET'];
+			'userdata' => [
+				'nome_fantasia' => $user->nome_fantasia,
+				'type' => 'ong'
+			]
+		]);
 
+		return response()->json([
+			"message" => 'Cadastro efetuado com sucesso',
+			"token" => $jwt,
+			"errors" => []
+		]);
+	}
 
+	public function list() {
 
-		$key = $jwt->resultKey($header, $payload, $signature);
-
-		return $key;
 	}
 }

@@ -1,4 +1,8 @@
 <?php
+
+namespace App\Utils\Tools;
+
+
 use \Firebase\JWT\JWT;
  
 /**
