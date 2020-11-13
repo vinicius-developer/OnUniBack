@@ -46,7 +46,8 @@ class Doador extends Model
         return $this->hasMany(RelacaoTelefone::class, 'id_doadores', 'id_doadores');
     }
 
-
-
-
+    public function genero() 
+    {
+        return $this->belongsTo(Genero::class, 'id_genero', 'id_genero');
+    }
 }

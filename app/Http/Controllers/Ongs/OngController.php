@@ -119,7 +119,7 @@ class OngController extends Controller
 
 		if($tbl_ongs) {
 			return response()->json([
-				"message" => "Sua conta foi ativada com sucesso tenta entrar",
+				"message" => "Sua conta foi ativada com sucesso",
 				'errors' => []
 			]);
 		} else {
@@ -135,6 +135,17 @@ class OngController extends Controller
 	public function login(LoginOngRequest $request)
     {
 		$credential = $request->only(["email", "password"]);
+
+		$user = $this->ong->select('status')
+							->where('email', '=', $request->email)
+							->where('status', '=', 'true')
+							->first();
+
+		if(!$user) {
+			return response()->json([
+				'message' => 'Essa conta não foi ativada ainda',
+			], 401);
+		}
 
         if (!$token = auth('ong')->attempt($credential)) {
             return response()->json(
@@ -176,7 +187,28 @@ class OngController extends Controller
 	
 	public function index() 
 	{
-		return DB::select('')
+		$listOngs = DB::table('tbl_ongs')
+						->join('tbl_causas_sociais', 'tbl_ongs.id_causas_sociais', '=', 'tbl_causas_sociais.id_causas_sociais')
+						->join('tbl_enderecos', 'tbl_enderecos.id_ongs', '=', 'tbl_ongs.id_ongs')
+						//->where('tbl_ongs.status', '=', 'true')
+				        ->select(
+								'tbl_ongs.id_ongs as Numero_de_Registro',
+    							'tbl_causas_sociais.nome_causa_social as Causa_Social',
+    							'tbl_ongs.cnpj as CNPJ',
+    							'tbl_ongs.nome_fantasia as Nome_Fantasia',
+    							'tbl_ongs.email as E-mail',
+    							'tbl_ongs.descricao_ong as Descricao',
+    							'tbl_enderecos.rua as Rua',
+    							'tbl_enderecos.cep as CEP',
+    							'tbl_enderecos.numero as Numero',
+    							'tbl_enderecos.complemento as Complemento',
+    							'tbl_enderecos.bairro as Bairro',
+    							'tbl_enderecos.cidade as Cidade',
+    							'tbl_enderecos.uf as Unidade_Federativa'
+						)->paginate(1);
+
+		dd(response()->json($listOngs->all()));
+
 	}
 
 	protected function respondWithToken($token)

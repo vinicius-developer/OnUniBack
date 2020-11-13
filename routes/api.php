@@ -18,27 +18,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('ong')
-	->group(function() {
-	Route::prefix('auth')
-			->namespace('App\Http\Controllers\Ongs')
-			->group(function() {
-				Route::post('register', 'OngController@register');
-				Route::post('login', 'OngController@login');
-				Route::get('activate/{id}', 'OngController@activate');
-			});
-	
+Route::prefix('ong')->group(function() {
+	Route::prefix('auth')->namespace('App\Http\Controllers\Ongs')->group(function() {
+		Route::post('register', 'OngController@register');
+		Route::post('login', 'OngController@login');
+		Route::put('activate/{id}', 'OngController@activate');
+	});
+	Route::prefix('auth')->namespace('App\Http\Controllers\Ongs')->middleware('check-token')->group(function() {
+		Route::post('logout', 'OngController@logout');
+		Route::post('me', 'OngController@me');
+	});
 });
 
 Route::prefix('info')->middleware('check-token')->namespace('App\Http\Controllers\Ongs')->group(function() {
-			Route::post('logout', 'OngController@logout');
-			Route::post('me', 'OngController@me');
-			Route::post('list', 'OngController@index');
+	Route::get('list', 'OngController@index');
 });	
-
-
-
-
-
-/*/api/auth/ong/register
-

@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CausasSociaisTableSeeder::class);
         $this->call(LojasTableSeeder::class);
+        $this->call(GenerosSeeder::class);
     }
 }

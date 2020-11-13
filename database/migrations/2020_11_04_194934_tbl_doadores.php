@@ -18,6 +18,7 @@ class TblDoadores extends Migration
 			$table->string('nome', 30);
 			$table->string('sobrenome', 50);
 			$table->string('email', 80)->unique();
+			$table->unsignedSmallInteger('id_generos');
 			$table->string('password', 72);
       		$table->string('img_perfil', 80);
       		$table->enum('status', ['true', 'false']);
