@@ -11,6 +11,7 @@ use App\Models\LogTokenJwt;
 use App\Http\Requests\Ong\RegisterOngRequest;
 use App\Http\Requests\Ong\LoginOngRequest;
 use App\Utils\Api\ReceitaWs;
+use Illuminate\Support\Facades\DB;
 use JWTAuth;
 use Mail;
 
@@ -175,6 +176,7 @@ class OngController extends Controller
 	
 	public function index() 
 	{
+		return DB::select('')
 	}
 
 	protected function respondWithToken($token)
