@@ -1,4 +1,0 @@
-update: composer update
-install: composer install
-migrate: php artisan migrate
-web: php artisan serve
