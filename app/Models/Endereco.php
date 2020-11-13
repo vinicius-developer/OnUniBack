@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Endereco extends Model
-{
+
+class Endereco extends Model{
     use HasFactory;
 
     protected $table = "tbl_enderecos";
@@ -32,4 +32,6 @@ class Endereco extends Model
     public function ong() {
         return $this->belongsTo(Ong::class, 'id_ongs', 'id_ongs');
     }
+
+    
 }

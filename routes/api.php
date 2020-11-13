@@ -28,17 +28,14 @@ Route::prefix('ong')
 				Route::get('activate/{id}', 'OngController@activate');
 			});
 	
-	Route::prefix('info')
-			->middleware('check-auth')
-			->namespace('App\Http\Controllers\Ongs')
-			->group(function() {
-				Route::post('list', 'OngController@list');
-			});
-			
-	
-  
-
 });
+
+Route::prefix('info')->middleware('check-token')->namespace('App\Http\Controllers\Ongs')->group(function() {
+			Route::post('logout', 'OngController@logout');
+			Route::post('me', 'OngController@me');
+			Route::post('list', 'OngController@index');
+});	
+
 
 
 

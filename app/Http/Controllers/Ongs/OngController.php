@@ -7,16 +7,18 @@ use App\Models\Ong;
 use App\Models\Endereco;
 use App\Models\Telefone;
 use App\Models\RelacaoTelefone;
+use App\Models\LogTokenJwt;
 use App\Http\Requests\Ong\RegisterOngRequest;
 use App\Http\Requests\Ong\LoginOngRequest;
 use App\Utils\Api\ReceitaWs;
-use App\Utils\Tools\JWTWrapper;
+use JWTAuth;
 use Mail;
 
 class OngController extends Controller
 {
 	private $receitaWs;
 	private $ong;
+	public $loginAfterSingUp = true;
 	
 	public function __construct() 
 	{
@@ -30,7 +32,7 @@ class OngController extends Controller
 		$tbl_enderecos = new Endereco();
 
 		/* Mínimo de oito caracteres, pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial */
-		$validatorPassword = preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", $request->senha);
+		$validatorPassword = preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", $request->password);
 
 		if(!$validatorPassword) {
 			return response()->json([
@@ -55,14 +57,13 @@ class OngController extends Controller
 		// 	]);
 		// }
 
-
         $tbl_ongs->id_ongs = md5(uniqid(rand(), 'true'));
 		$tbl_ongs->id_causas_sociais = $request->causa_social;
 		$tbl_ongs->cnpj = $request->cnpj;
 		$tbl_ongs->nome_fantasia = $request->nome_fantasia;
         $tbl_ongs->razao_social = $request->razao_social;
 		$tbl_ongs->email = $request->email;
-		$tbl_ongs->senha = bcrypt($request->senha);
+		$tbl_ongs->password = bcrypt($request->password); 
 		$tbl_ongs->descricao_ong = $request->descricao;
 		$tbl_ongs->img_perfil = 'pothoPerfilOng/fotoOngPadrao.png';
 		$createOng = $tbl_ongs->save();
@@ -90,7 +91,6 @@ class OngController extends Controller
 			$tbl_relacao_telefones->save();
 		}
 		
-
 		if($createOng && $createEndereco) {
 			//Mail::send(new \App\Mail\resgiterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
 			//Mail::send(new \App\Mail\resgiterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
@@ -127,46 +127,62 @@ class OngController extends Controller
 				"errors" => [
 					"Estamos com algum problema em nosso sistema"
 				],
-
 			]);
 		}
 	}
 
-	public function login(LoginOngRequest $request) 
+	public function login(LoginOngRequest $request)
+    {
+		$credential = $request->only(["email", "password"]);
+
+        if (!$token = auth('ong')->attempt($credential)) {
+            return response()->json(
+				['errors' => 'Seus dados não foram encontrados em nosso sistema'], 401);
+		}
+
+		$log = new LogTokenJwt();
+
+		$log->create([
+			'token' => $token,
+			'email' => $credential['email'],
+			'tipo_usuario' => 'ong'
+		]);
+
+        return $this->respondWithToken($token);
+	}
+	
+	public function logout()
+    {
+        auth()->logout();
+
+        return response()->json(['message' => 'Você foi desconectado com sucesso']);
+	}
+
+	public function me()
+    {
+		$user = auth('ong')->user();
+
+		$teste = $user->select('id_causas_sociais',
+								'cnpj',
+								'nome_fantasia',
+								'razao_social',
+								'email',
+								'descricao_ong')->first();
+
+        return response()->json($teste);
+    }
+	
+	
+	public function index() 
 	{
-
-		$user = $this->ong->select('*')
-							->where('email', '=', $request->email)
-							->where('status', '<>', 'false')
-							->first();
-
-		if(!$user || crypt($request->senha, $user->senha) !== $user->senha) {
-			return response()->json([
-				"message" => 'As informações inseridas estão incorretas ou não estão cadastrados em nosso sitema',
-				"errors" => [
-					"Unauthorized" => 401
-				]
-			]);
-		}
-
-		$jwt = JWTWrapper::encode([
-			'expiration_sec' => 43200,
-			'iss' => $user->email,
-			'sub' => $user->id_ongs,
-			'userdata' => [
-				'nome_fantasia' => $user->nome_fantasia,
-				'type' => 'ong'
-			]
-		]);
-
-		return response()->json([
-			"message" => 'Cadastro efetuado com sucesso',
-			"token" => $jwt,
-			"errors" => []
-		]);
 	}
 
-	public function list() {
-
+	protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('ong')->factory()->getTTL() * 200
+        ]);
 	}
 }

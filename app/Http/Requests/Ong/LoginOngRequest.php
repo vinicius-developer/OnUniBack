@@ -25,7 +25,7 @@ class LoginOngRequest extends FormRequest
     {
         return [
             'email' => 'required|max:80|email:rfc,dns',
-            'senha' => 'required'
+            'password' => 'required'
         ];
     }
 }

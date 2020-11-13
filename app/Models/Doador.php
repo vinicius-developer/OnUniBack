@@ -16,7 +16,7 @@ class Doador extends Model
         'nome', 
         'sobrenome', 
         'email', 
-        'senha', 
+        'password', 
         'img_perfil'
     ];
 

@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => env('AUTH_GUARD', 'ong'),
         'passwords' => 'users',
     ],
 
@@ -41,10 +41,9 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
+        'ong' => [
+            'driver' => 'jwt',
+            'provider' => 'ongs',
         ],
     ],
 
@@ -66,9 +65,10 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'ongs' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Ong::class,
+            'table' => 'tbl_ongs'
         ],
 
         // 'users' => [

@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
 
-class Ong extends Model
+class Ong extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+    use Notifiable;
 
     protected $table = 'tbl_ongs';
     protected $primaryKey = 'id_ongs';
@@ -18,7 +21,7 @@ class Ong extends Model
         'nome_fantasia',
         'razao_social', 
         'email', 
-        'senha', 
+        'password', 
         'descricao_ong', 
         'img_perfil'
     ];
@@ -63,5 +66,13 @@ class Ong extends Model
         return $this->hasMany(relacaoTelefone::class, 'id_ongs', 'id_ongs');
     }
 
+    public function getJWTIdentifier() 
+    {
+        return $this->getKey();
+    }
 
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }

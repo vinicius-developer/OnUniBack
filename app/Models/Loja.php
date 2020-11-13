@@ -12,7 +12,7 @@ class Loja extends Model
     protected $table = 'tbl_lojas';
     protected $primaryKey = 'id_lojas';
 
-    protected $filllable = [
+    protected $fillable = [
         'nome_loja',
         'link_loja'
     ];

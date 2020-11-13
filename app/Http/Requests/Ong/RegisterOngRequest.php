@@ -29,7 +29,7 @@ class RegisterOngRequest extends FormRequest
             'nome_fantasia' => 'required|max:80',
             'razao_social' => 'required|max:80',
             'email' => 'required|max:80|confirmed|email:rfc,dns|unique:tbl_ongs',
-            'senha' => 'required|confirmed',
+            'password' => 'required|confirmed',
             'descricao' => 'required|max:65535',
             'rua' => 'required|max:40',
             'cep' => 'required|formato_cep',
