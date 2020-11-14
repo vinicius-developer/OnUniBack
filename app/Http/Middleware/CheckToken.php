@@ -40,7 +40,7 @@ class CheckToken extends BaseMiddleware
                 return response()->json(['status' => 'Token expirou'], 401);
 
             }else{
-                return response()->json(['status' => 'Não foi informado'], 401);
+                return response()->json(['status' => 'Token não foi informado'], 401);
             }
         }
         return $next($request);
