@@ -19,17 +19,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('ong')->group(function() {
-	Route::prefix('auth')->namespace('App\Http\Controllers\Ongs')->group(function() {
+	Route::prefix('auth')->namespace('App\Http\Controllers\Users')->group(function() {
 		Route::post('register', 'OngController@register');
 		Route::post('login', 'OngController@login');
 		Route::put('activate/{id}', 'OngController@activate');
 	});
-	Route::prefix('auth')->namespace('App\Http\Controllers\Ongs')->middleware('check-token')->group(function() {
+	Route::prefix('auth')->namespace('App\Http\Controllers\Users')->middleware('check-token')->group(function() {
 		Route::post('logout', 'OngController@logout');
 		Route::post('me', 'OngController@me');
 	});
 });
 
-Route::prefix('info')->middleware('check-token')->namespace('App\Http\Controllers\Ongs')->group(function() {
-	Route::get('list', 'OngController@index');
+Route::prefix('info')->middleware('check-token')->group(function() {
+	Route::prefix('users')->namespace('App\Http\Controllers\Users')->group(function() {
+		Route::get('list', 'OngController@index');
+	});
+
+	Route::prefix('objects')->namespace('App\Http\Controllers\Objects')->group(function() {
+		Route::get('telephone/list/{id}', 'TelefoneController@index');
+		Route::get('address/list/{id}', 'EnderecoController@index');
+	});	
 });	

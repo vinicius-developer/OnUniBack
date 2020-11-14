@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ongs;
+namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ong;
@@ -189,8 +189,7 @@ class OngController extends Controller
 	{
 		$listOngs = DB::table('tbl_ongs')
 						->join('tbl_causas_sociais', 'tbl_ongs.id_causas_sociais', '=', 'tbl_causas_sociais.id_causas_sociais')
-						->join('tbl_enderecos', 'tbl_enderecos.id_ongs', '=', 'tbl_ongs.id_ongs')
-						//->where('tbl_ongs.status', '=', 'true')
+						->where('tbl_ongs.status', '=', 'true')
 				        ->select(
 								'tbl_ongs.id_ongs as Numero_de_Registro',
     							'tbl_causas_sociais.nome_causa_social as Causa_Social',
@@ -198,16 +197,11 @@ class OngController extends Controller
     							'tbl_ongs.nome_fantasia as Nome_Fantasia',
     							'tbl_ongs.email as E-mail',
     							'tbl_ongs.descricao_ong as Descricao',
-    							'tbl_enderecos.rua as Rua',
-    							'tbl_enderecos.cep as CEP',
-    							'tbl_enderecos.numero as Numero',
-    							'tbl_enderecos.complemento as Complemento',
-    							'tbl_enderecos.bairro as Bairro',
-    							'tbl_enderecos.cidade as Cidade',
-    							'tbl_enderecos.uf as Unidade_Federativa'
-						)->paginate(1);
+						)->paginate(5);
 
-		dd(response()->json($listOngs->all()));
+        
+
+		return response()->json($listOngs);
 
 	}
 
