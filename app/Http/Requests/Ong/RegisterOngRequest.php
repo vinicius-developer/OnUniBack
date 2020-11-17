@@ -25,7 +25,7 @@ class RegisterOngRequest extends FormRequest
     {
         return [
             'causa_social' => 'required|integer',
-            'cnpj' => 'required|cnpj|unique:tbl_ongs',
+            'cnpj' => 'required|formato_cnpj|unique:tbl_ongs',
             'nome_fantasia' => 'required|max:80',
             'razao_social' => 'required|max:80',
             'email' => 'required|max:80|confirmed|email:rfc,dns|unique:tbl_ongs',
@@ -44,7 +44,7 @@ class RegisterOngRequest extends FormRequest
 
     public function messages() {
         return [
-            'cnpj.cnpj' => 'O campo CNPJ é inválido',
+            'cnpj.formato_cnpj' => 'O campo CNPJ é inválido',
             'cep.formato_cep' => 'O campo CEP é inválido',
             'email.unique' => 'Esse e-mail já foi cadastrado em nosso sistema',
             'cnpj.unique' => [

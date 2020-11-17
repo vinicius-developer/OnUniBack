@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+//use Illuminate\Database\Eloquent\Factories\HasFactory;
+//use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
 
-class Doador extends Model
+
+class Doador extends Authenticatable implements JWTSubject 
 {
-    use HasFactory;
+    use Notifiable;
 
     protected $table = 'tbl_doadores';
     protected $primaryKey = 'id_doadores';
@@ -49,5 +53,15 @@ class Doador extends Model
     public function genero() 
     {
         return $this->belongsTo(Genero::class, 'id_genero', 'id_genero');
+    }
+
+    public function getJWTIdentifier() 
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

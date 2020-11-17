@@ -46,6 +46,11 @@ return [
             'driver' => 'jwt',
             'provider' => 'ongs',
         ],
+
+        'doador' => [
+            'driver' => 'jwt',
+            'provider' => 'doadores'
+        ]
     ],
 
     /*
@@ -71,6 +76,12 @@ return [
             'model' => App\Models\Ong::class,
             'table' => 'tbl_ongs'
 
+        ],
+
+        'doadores' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Doador::class,
+            'table' => 'tbl_doadores'
         ],
 
         // 'users' => [

@@ -11,15 +11,16 @@ use App\Models\LogTokenJwt;
 use App\Http\Requests\Ong\RegisterOngRequest;
 use App\Http\Requests\Ong\LoginOngRequest;
 use App\Utils\Api\ReceitaWs;
+use App\Utils\Tools\Validators;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\RegisterOngsMail;
 use Mail;
 
 class OngController extends Controller
 {
 	private $receitaWs;
 	private $ong;
-	public $loginAfterSingUp = true;
 	
 	public function __construct() 
 	{
@@ -31,20 +32,13 @@ class OngController extends Controller
 	{
 		$tbl_ongs = $this->ong;
 		$tbl_enderecos = new Endereco();
+		$validators = new Validators();
 
-		/* Mínimo de oito caracteres, pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial */
-		$validatorPassword = preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", $request->password);
+        $responsePassword = $validators->validatorPassword($request->password);
 
-		if(!$validatorPassword) {
-			return response()->json([
-				"message" => "The given data was invalid",
-				"errors" => [
-					"senha" => [
-						"A senha deve conter no mínimo de oito caracteres, pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial"
-					]
-				]
-			]);
-		}
+        if($responsePassword) {
+            return response()->json($responsePassword);
+        }
 
 		//$responseReceitaWs = $this->receitaWs->requestGetWs($cnpjOnlyNumbers); // NECESSÀRIO SOMENTE EM PRODUÇÃO
 		// if($responseReceitaWs["situacao"] !== "ATIVA") {
@@ -93,10 +87,10 @@ class OngController extends Controller
 		}
 		
 		if($createOng && $createEndereco) {
-			//Mail::send(new \App\Mail\resgiterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
-			//Mail::send(new \App\Mail\resgiterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
+			//Mail::send(new ResgiterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
+			//Mail::send(new ResgiterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
 			return response()->json([
-				"message" => 'Sua conta foi criado com sucesso por favor verifique o email da ong que está cadastrado no CNPJ',
+				"message" => 'Sua conta foi criado com sucesso por favor verifique o e-mail da ong que está cadastrado no CNPJ',
 				"errors" => [],
 			]);
 		} else {
@@ -112,12 +106,12 @@ class OngController extends Controller
 	
 	public function activate($id) 
 	{
-		$tbl_ongs = $this->ong->select('*')->where('id_ongs','=', $id)->first();
+		$user = $this->ong->select('*')->where('id_ongs','=', $id)->first();
 
-		$tbl_ongs->status = 'true';
-		$tbl_ongs->save();
+		$user->status = 'true';
+		$user->save();
 
-		if($tbl_ongs) {
+		if($user) {
 			return response()->json([
 				"message" => "Sua conta foi ativada com sucesso",
 				'errors' => []
@@ -165,14 +159,15 @@ class OngController extends Controller
     {
 		$user = auth('ong')->user();
 
-		$teste = $user->select('id_causas_sociais',
+		$query = $user->select('id_causas_sociais',
 								'cnpj',
 								'nome_fantasia',
 								'razao_social',
 								'email',
-								'descricao_ong')->first();
+								'descricao_ong',
+								'img_perfil')->first();
 
-        return response()->json($teste);
+        return response()->json($query);
     }
 	
 	public function index() 
