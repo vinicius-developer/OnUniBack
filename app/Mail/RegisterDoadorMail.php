@@ -7,12 +7,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class resgiterOngsMail extends Mailable
+class RegisterDoadorMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $email;
-    public $name;
+    public $nome;
+    public $sobrenome;
     public $id;
 
     /**
@@ -20,10 +21,11 @@ class resgiterOngsMail extends Mailable
      *
      * @return void
      */
-    public function __construct($email, $name, $id)
+    public function __construct($email, $nome, $sobrenome, $id)
     {
         $this->email = $email;
-        $this->name = $name;
+        $this->nome = $nome;
+        $this->sobrenome = $sobrenome;
         $this->id = $id;
     }
 
@@ -34,14 +36,14 @@ class resgiterOngsMail extends Mailable
      */
     public function build()
     {
-        $url = 'http://127.0.0.1:8000/api/auth/ong/activate/' . $this->id;
+        $url = 'http://127.0.0.1:8000/api/doador/auth/activate/' . $this->id;
 
         $this->from('onuniapi@gmail.com', 'OnUni');
         $this->subject('Confirmação de conta OnUni');
-        $this->to($this->email, $this->name);
-        return $this->markdown('mail.registerOng', [
-            'nomeFantasia' => $this->name,
-            'urlRegisterOng' => $url
+        $this->to($this->email, $this->nome . " " . $this->sobrenome);
+        return $this->markdown('mail.registerDoadores', [
+            'nome' => $this->nome,
+            'urlRegisterDoador' => $url
         ]);
     }
 }

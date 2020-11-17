@@ -29,6 +29,6 @@ class LogTokenJwt extends Migration
      */
     public function down()
     {
-        Schema::drop('tbl_log_tokens_jwt');
+        Schema::drop('tbl_logs_tokens_jwt');
     }
 }

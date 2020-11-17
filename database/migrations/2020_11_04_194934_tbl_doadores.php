@@ -15,13 +15,14 @@ class TblDoadores extends Migration
 	{
 		Schema::create('tbl_doadores', function(Blueprint $table) {
 			$table->string('id_doadores', 32)->primary();
+			$table->char('cpf', 14);
 			$table->string('nome', 30);
 			$table->string('sobrenome', 50);
 			$table->string('email', 80)->unique();
 			$table->unsignedSmallInteger('id_generos');
 			$table->string('password', 72);
       		$table->string('img_perfil', 80);
-      		$table->enum('status', ['true', 'false']);
+			$table->enum('status', ['false', 'true']);
 			$table->timestamps('');
 		});
     }

@@ -14,8 +14,9 @@ return [
     */
 
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'ong'),
-        'passwords' => 'users',
+        //'guard' => env('AUTH_GUARD', 'ong'),
+        'guard' => 'ong',
+        'passwords' => 'tbl_ongs',
     ],
 
     /*
@@ -36,15 +37,20 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+        // 'web' => [
+        //     'driver' => 'session',
+        //     'provider' => 'users',
+        // ],
 
         'ong' => [
             'driver' => 'jwt',
             'provider' => 'ongs',
         ],
+
+        'doador' => [
+            'driver' => 'jwt',
+            'provider' => 'doadores'
+        ]
     ],
 
     /*
@@ -69,6 +75,13 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Ong::class,
             'table' => 'tbl_ongs'
+
+        ],
+
+        'doadores' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Doador::class,
+            'table' => 'tbl_doadores'
         ],
 
         // 'users' => [

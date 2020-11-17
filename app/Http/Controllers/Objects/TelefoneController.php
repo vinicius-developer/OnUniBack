@@ -12,12 +12,12 @@ class TelefoneController extends Controller
     {
        $telephone = DB::table('tbl_telefones')
                         ->join('tbl_relacao_telefones',
-                        'tbl_relacao_telefones.id_telefones', '=' , 'tbl_telefones.id_telefones')
+                            'tbl_relacao_telefones.id_telefones', '=' , 'tbl_telefones.id_telefones')
                         ->join('tbl_ongs', 
-                        'tbl_ongs.id_ongs', '=', 'tbl_relacao_telefones.id_ongs')
+                            'tbl_ongs.id_ongs', '=', 'tbl_relacao_telefones.id_ongs')
                         ->where('tbl_relacao_telefones.id_ongs', '=', $id_ongs)
                         ->select(
-                            'tbl_telefones.numero_telefone'
+                            'tbl_telefones.numero_telefone as Numero de Telefone'
                         )->get();
 
         return response()->json($telephone);

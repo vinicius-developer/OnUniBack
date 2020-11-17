@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Ong;
+namespace App\Http\Requests\Doador;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginOngRequest extends FormRequest
+class LoginDoadorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,8 @@ class LoginOngRequest extends FormRequest
     public function rules()
     {
         return [
-            'cnpj' => 'required|max:80|formato_cnpj',
-            'password' => 'required'
+            "cpf" => "required|formato_cpf",
+            "password" => "required"
         ];
     }
 }
-

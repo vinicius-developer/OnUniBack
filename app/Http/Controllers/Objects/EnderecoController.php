@@ -19,7 +19,7 @@ class EnderecoController extends Controller
     						'tbl_enderecos.complemento as Complemento',
    							'tbl_enderecos.bairro as Bairro',
     						'tbl_enderecos.cidade as Cidade',
-    					    'tbl_enderecos.uf as Unidade_Federativa'
+    					    'tbl_enderecos.uf as Unidade Federativa'
                        )->get();
 
         return response()->json($address);
