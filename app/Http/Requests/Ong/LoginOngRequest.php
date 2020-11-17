@@ -24,7 +24,7 @@ class LoginOngRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|max:80|email:rfc,dns',
+            'cnpj' => 'required|max:80|cnpj',
             'password' => 'required'
         ];
     }

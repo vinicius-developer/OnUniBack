@@ -12,7 +12,7 @@ use App\Http\Requests\Ong\RegisterOngRequest;
 use App\Http\Requests\Ong\LoginOngRequest;
 use App\Utils\Api\ReceitaWs;
 use Illuminate\Support\Facades\DB;
-use JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use Mail;
 
 class OngController extends Controller
@@ -134,20 +134,11 @@ class OngController extends Controller
 
 	public function login(LoginOngRequest $request)
     {
-		$credential = $request->only(["email", "password"]);
+		$credential = $request->only(['cnpj', 'password']);
 
-		$user = $this->ong->select('status')
-							->where('email', '=', $request->email)
-							->where('status', '=', 'true')
-							->first();
+		$credential['status'] = 'true';
 
-		if(!$user) {
-			return response()->json([
-				'message' => 'Essa conta não foi ativada ainda',
-			], 401);
-		}
-
-        if (!$token = auth('ong')->attempt($credential)) {
+	    if (!$token = Auth::guard('ong')->attempt($credential)) {
             return response()->json(
 				['errors' => 'Seus dados não foram encontrados em nosso sistema'], 401);
 		}
@@ -156,7 +147,7 @@ class OngController extends Controller
 
 		$log->create([
 			'token' => $token,
-			'email' => $credential['email'],
+			'email' => $credential['cnpj'],
 			'tipo_usuario' => 'ong'
 		]);
 
@@ -184,25 +175,21 @@ class OngController extends Controller
         return response()->json($teste);
     }
 	
-	
 	public function index() 
 	{
 		$listOngs = DB::table('tbl_ongs')
 						->join('tbl_causas_sociais', 'tbl_ongs.id_causas_sociais', '=', 'tbl_causas_sociais.id_causas_sociais')
 						->where('tbl_ongs.status', '=', 'true')
 				        ->select(
-								'tbl_ongs.id_ongs as Numero_de_Registro',
-    							'tbl_causas_sociais.nome_causa_social as Causa_Social',
+								'tbl_ongs.id_ongs as Numero de Registro',
+    							'tbl_causas_sociais.nome_causa_social as Causa Social',
     							'tbl_ongs.cnpj as CNPJ',
-    							'tbl_ongs.nome_fantasia as Nome_Fantasia',
+    							'tbl_ongs.nome_fantasia as Nome Fantasia',
     							'tbl_ongs.email as E-mail',
     							'tbl_ongs.descricao_ong as Descricao',
 						)->paginate(5);
 
-        
-
 		return response()->json($listOngs);
-
 	}
 
 	protected function respondWithToken($token)

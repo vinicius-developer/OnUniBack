@@ -14,8 +14,9 @@ return [
     */
 
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'ong'),
-        'passwords' => 'users',
+        //'guard' => env('AUTH_GUARD', 'ong'),
+        'guard' => 'ong',
+        'passwords' => 'tbl_ongs',
     ],
 
     /*
@@ -36,10 +37,10 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+        // 'web' => [
+        //     'driver' => 'session',
+        //     'provider' => 'users',
+        // ],
 
         'ong' => [
             'driver' => 'jwt',
@@ -69,6 +70,7 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Ong::class,
             'table' => 'tbl_ongs'
+
         ],
 
         // 'users' => [
