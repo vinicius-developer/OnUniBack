@@ -25,8 +25,8 @@ Route::prefix('ong')->group(function() {
 		Route::put('activate/{id}', 'OngController@activate');
 	});
 	Route::prefix('auth')->namespace('App\Http\Controllers\Users')->middleware('check-token')->group(function() {
-		Route::post('logout', 'OngController@logout');
-		Route::post('me', 'OngController@me');
+		Route::get('logout', 'OngController@logout');
+		Route::get('me', 'OngController@me');
 	});
 });
 
@@ -37,8 +37,8 @@ Route::prefix('doador')->group(function() {
 		Route::put('activate/{id}', 'DoadorController@activate');
 	});
 	Route::prefix('auth')->namespace('App\Http\Controllers\Users')->middleware('check-token')->group(function(){
-		Route::post('logout', 'DoadorController@logout');
-		Route::post('me', 'DoadorController@me');
+		Route::get('logout', 'DoadorController@logout');
+		Route::get('me', 'DoadorController@me');
 	});
 });
 
