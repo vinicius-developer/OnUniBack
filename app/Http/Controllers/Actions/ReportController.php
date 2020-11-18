@@ -28,26 +28,12 @@ class ReportController extends Controller
 
         if($request->tipo_usuario_reportado === 'ong') {
             $acusador = Auth::guard('doador')->user();
-
-            $reportadoExists = DB::table('tbl_ongs')
-                                ->where('id_ongs', '=', $request->id_reportado)
-                                ->exists();
-
-            $reportExists = $this->tbl_relacao_reports
-                                ->where("id_ongs", "=", $request->id_reportado)
-                                ->where("id_doadores", "=", $acusador->id_doadores)
-                                ->exists();
+            $reportExists = reportExists();
+            $reportadoExists = $this->reportadoExists('tbl_ongs', 'id_ongs', $request->id_reportado);
         } else {
             $acusador = Auth::guard('ong')->user();
-
-            $reportadoExists = DB::table('tbl_doadores')
-                                ->where('id_doadores', '=', $request->id_reportado)
-                                ->exists();
-
-            $reportExists =  $this->tbl_relacao_reports
-                                ->where("id_ongs", "=", $acusador->id_doadores)
-                                ->where("id_doadores", "=",  $request->id_reportado)
-                                ->exists();
+            $reportExists = reportExists();
+            $reportadoExists = $this->reportadoExists('tbl_doadores', 'id_doadores', $request->id_reportado);
         }
 
         if($reportExists) {
@@ -68,13 +54,24 @@ class ReportController extends Controller
 
         if($request->tipo_usuario_reportado === 'ong') {
             $tbl_relacao_reports->id_doadores = $acusador->id_doadores;
-            $tbl_relacao_reports->id_ongs = $request->id_reportado;
         } else {
-            $tbl_relacao_reports->id_doadores = $request->id_reportado;
             $tbl_relacao_reports->id_ongs = $acusador->id_ongs;
         }
 
         $tbl_relacao_reports->id_reports = $tbl_reports->id_reports;
         $tbl_relacao_reports->save();
+    }
+
+
+    protected function reportadoExists($tabela, $colunm, $id) 
+    {
+        return $reportadoExists = DB::table($tabela)
+                                ->where($colunm, '=', $id)
+                                ->exists();    
+    }
+
+    protected function reportExists()
+    {
+
     }
 }

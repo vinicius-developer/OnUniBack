@@ -15,6 +15,7 @@ class TblReports extends Migration
     {
         Schema::create('tbl_reports', function(Blueprint $table) {
             $table->increments('id_reports');
+            $table->string('id_reportado', 32);
             $table->text('explicacao');
             $table->enum('tipo_usuario_reportado', ['ong', 'doador']);
             $table->timestamps();
