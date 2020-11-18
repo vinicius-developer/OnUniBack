@@ -27,9 +27,10 @@ class RegisterDoadorRequest extends FormRequest
             'nome' => 'required|max:30',
             'sobrenome' => 'required|max:50',
             'email' => 'required|max:80|email|confirmed|email:rfc,dns|unique:tbl_doadores',
-            'cpf' => 'required|min:14|max:14|formato_cpf',
+            'cpf' => 'required|min:14|max:14|formato_cpf|cpf',
             'password' => 'required|confirmed',
-            'genero' => "required|integer"
+            'genero' => "required|integer",
+            'telefones' => "required"
         ];
     }
 

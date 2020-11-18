@@ -13,8 +13,8 @@ class Report extends Model
     protected $primaryKey = 'id_reports';
 
     protected $fillable = [
-        'explicaco',
-        'tipo_usuario_report',
+        'explicacao',
+        'tipo_usuario_reportado',
     ];
 
     protected $guarded = [

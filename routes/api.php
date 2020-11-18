@@ -30,17 +30,6 @@ Route::prefix('ong')->group(function() {
 	});
 });
 
-Route::prefix('info')->middleware('check-token')->group(function() {
-	Route::prefix('users')->namespace('App\Http\Controllers\Users')->group(function() {
-		Route::get('list', 'OngController@index');
-	});
-
-	Route::prefix('objects')->namespace('App\Http\Controllers\Objects')->group(function() {
-		Route::get('telephone/list/{id}', 'TelefoneController@index');
-		Route::get('address/list/{id}', 'EnderecoController@index');
-	});	
-});	
-
 Route::prefix('doador')->group(function() {
 	Route::prefix('auth')->namespace('App\Http\Controllers\Users')->group(function() {
 		Route::post('register', 'DoadorController@register');
@@ -52,5 +41,24 @@ Route::prefix('doador')->group(function() {
 		Route::post('me', 'DoadorController@me');
 	});
 });
+
+Route::prefix('info')->middleware('check-token')->group(function() {
+	Route::prefix('users')->namespace('App\Http\Controllers\Users')->group(function() {
+		Route::get('list', 'OngController@index');
+	});
+	Route::prefix('objects')->namespace('App\Http\Controllers\Objects')->group(function() {
+		Route::get('telephone/list/{id}', 'TelefoneController@index');
+		Route::get('address/list/{id}', 'EnderecoController@index');
+	});	
+
+});	
+
+Route::prefix('actions')->middleware('check-token')->group(function() {	
+	Route::prefix('report')->namespace('App\Http\Controllers\Actions')->group(function(){
+		Route::post('register', 'ReportController@register');
+	});
+});
+
+
 
 

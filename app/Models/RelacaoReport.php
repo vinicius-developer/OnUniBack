@@ -22,6 +22,9 @@ class RelacaoReport extends Model
         'id_relacao_reports'
     ];
 
+    public $timestamps = false;
+
+
     public function ong() 
     {
         return $this->belongsTo(Ong::class, 'id_ongs', 'id_ongs');
