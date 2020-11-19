@@ -13,7 +13,7 @@ class RegisterListaPedidosOngRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class RegisterListaPedidosOngRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "nome_item" => "required|max:40",
+            "id_lojas" => "required|integer"
         ];
     }
 }

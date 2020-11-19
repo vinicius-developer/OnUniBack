@@ -28,6 +28,11 @@ Route::prefix('ong')->group(function() {
 		Route::get('logout', 'OngController@logout');
 		Route::get('me', 'OngController@me');
 	});
+	Route::prefix('wishlist')->namespace('App\Http\Controllers\Objects')->middleware('check-token')->group(function() {
+		Route::post('register', 'ListaPedidoOngController@register');
+		Route::get('index', 'ListaPedidoOngController@index');
+		Route::delete('delete/{id}', 'ListaPedidoOngController@delete');
+	});
 });
 
 Route::prefix('doador')->group(function() {
@@ -52,9 +57,7 @@ Route::prefix('info')->middleware('check-token')->group(function() {
 	Route::prefix('objects')->namespace('App\Http\Controllers\Objects')->group(function() {
 		Route::get('telephone/list/{id}', 'TelefoneController@index');
 		Route::get('address/list/{id}', 'EnderecoController@index');
-		//Route::get('add/ong/list', '')
 	});	
-
 });	
 
 Route::prefix('actions')->middleware('check-token')->group(function() {	
