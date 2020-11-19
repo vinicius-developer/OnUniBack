@@ -129,6 +129,8 @@ class DoadorController extends Controller
 
         return response()->json($query);
     }
+
+    
     
     protected function respondWithToken($token)
     {

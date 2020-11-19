@@ -15,8 +15,8 @@ class TblRelacaoReports extends Migration
     {
         Schema::create('tbl_relacao_reports', function(Blueprint $table) {
             $table->bigIncrements('id_relacao_reports');
-            $table->string('id_doadores', 32)->nullabel();
-            $table->string('id_ongs', 32)->nullabel();
+            $table->string('id_doadores', 32)->nullable();
+            $table->string('id_ongs', 32)->nullable();
             $table->unsignedInteger('id_reports');
         });
     }

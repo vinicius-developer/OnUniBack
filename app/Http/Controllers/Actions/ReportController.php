@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Actions;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Report;
 use App\Models\RelacaoReport;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Report\RegisterReportRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,11 +27,11 @@ class ReportController extends Controller
 
         if($request->tipo_usuario_reportado === 'ong') {
             $acusador = Auth::guard('doador')->user();
-            $reportExists = reportExists();
+            $reportExists = $this->reportExists('tbl_relacao_reports.id_doadores', 'tbl_reports.id_reportado', $acusador->id_doadores, $request->id_reportado);
             $reportadoExists = $this->reportadoExists('tbl_ongs', 'id_ongs', $request->id_reportado);
         } else {
             $acusador = Auth::guard('ong')->user();
-            $reportExists = reportExists();
+            $reportExists = $this->reportExists('tbl_relacao_reports.id_ongs', 'tbl_reports.id_reportado', $acusador->id_ongs, $request->id_reportado);
             $reportadoExists = $this->reportadoExists('tbl_doadores', 'id_doadores', $request->id_reportado);
         }
 
@@ -48,9 +47,10 @@ class ReportController extends Controller
             ], 404);
         }
 
+        $tbl_reports->id_reportado = $request->id_reportado;
         $tbl_reports->explicacao = $request->explicacao;
         $tbl_reports->tipo_usuario_reportado = $request->tipo_usuario_reportado;
-        $tbl_reports->save();
+        $createReport = $tbl_reports->save();
 
         if($request->tipo_usuario_reportado === 'ong') {
             $tbl_relacao_reports->id_doadores = $acusador->id_doadores;
@@ -59,19 +59,30 @@ class ReportController extends Controller
         }
 
         $tbl_relacao_reports->id_reports = $tbl_reports->id_reports;
-        $tbl_relacao_reports->save();
+        $createRelacaoReport = $tbl_relacao_reports->save();
+
+        if($createReport && $createRelacaoReport) {
+            return response()->json([
+                "message" => "Sua reclamação foi salva com sucesso, nós iremos analisá-la"
+            ], 200);
+        }
     }
 
 
     protected function reportadoExists($tabela, $colunm, $id) 
     {
-        return $reportadoExists = DB::table($tabela)
-                                ->where($colunm, '=', $id)
-                                ->exists();    
+        return DB::table($tabela)
+                   ->where($colunm, '=', $id)
+                   ->exists();    
     }
 
-    protected function reportExists()
+    protected function reportExists($colunmAcusador, $colunmReportado, $idAcusador, $idReportado)
     {
+        return DB::table('tbl_relacao_reports')
+                   ->join('tbl_reports', 'tbl_relacao_reports.id_reports', '=', 'tbl_reports.id_reports')
+                   ->where($colunmAcusador, '=', $idAcusador)
+                   ->where($colunmReportado, '=', $idReportado)
+                   ->exists();
 
     }
 }

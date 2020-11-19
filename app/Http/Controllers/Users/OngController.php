@@ -12,7 +12,6 @@ use App\Http\Requests\Ong\RegisterOngRequest;
 use App\Http\Requests\Ong\LoginOngRequest;
 use App\Utils\Api\ReceitaWs;
 use App\Utils\Tools\Validators;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\RegisterOngsMail;
 use Mail;
@@ -48,7 +47,7 @@ class OngController extends Controller
 		//			"cnpj": [					
 		//              "Esse Cnpj não está ativo"	
 		//          ]
-		//	    ]
+		
 		// 	]);
 		// }
 
@@ -172,7 +171,7 @@ class OngController extends Controller
 	
 	public function index() 
 	{
-		$listOngs = DB::table('tbl_ongs')
+		$listOngs = $this->ong
 						->join('tbl_causas_sociais', 'tbl_ongs.id_causas_sociais', '=', 'tbl_causas_sociais.id_causas_sociais')
 						->where('tbl_ongs.status', '=', 'true')
 				        ->select(
@@ -181,11 +180,29 @@ class OngController extends Controller
     							'tbl_ongs.cnpj as CNPJ',
     							'tbl_ongs.nome_fantasia as Nome Fantasia',
     							'tbl_ongs.email as E-mail',
-    							'tbl_ongs.descricao_ong as Descricao',
+								'tbl_ongs.descricao_ong as Descricao',
+                        		'tbl_ongs.img_perfil as Imagem de Perfil'
 						)->paginate(5);
 
 		return response()->json($listOngs);
 	}
+
+	public function find($id)
+    {
+        $ong = $this->ong
+                    ->select(
+                        'tbl_causas_sociais.nome_causa_social',
+                        'tbl_ongs.cnpj',
+                        'tbl_ongs.nome_fantasia',
+                        'tbl_ongs.email',
+                        'tbl_ongs.descricao_ong',
+                        'tbl_ongs.img_perfil'
+                    )->join('tbl_causas_sociais', 'tbl_causas_sociais.id_causas_sociais', '=', 'tbl_ongs.id_causas_sociais')
+					->where('tbl_ongs.id_ongs', '=', $id)
+					->first();
+
+        return response()->json([$ong]);
+    }
 
 	protected function respondWithToken($token)
     {
