@@ -28,7 +28,7 @@ class RegisterOngRequest extends FormRequest
             'cnpj' => 'required|formato_cnpj|unique:tbl_ongs|cnpj',
             'nome_fantasia' => 'required|max:80',
             'razao_social' => 'required|max:80',
-            'email' => 'required|max:80|confirmed|email:rfc,dns|unique:tbl_ongs',
+            'email' => 'required|max:80|email:rfc,dns|unique:tbl_ongs',
             'password' => 'required|confirmed',
             'descricao' => 'required|max:65535',
             'rua' => 'required|max:40',
