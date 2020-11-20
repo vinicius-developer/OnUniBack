@@ -12,6 +12,7 @@ class EnderecoController extends Controller
     {
         $address = DB::table('tbl_enderecos')
                        ->where('id_ongs', '=', $id_ongs)
+                       ->join('tbl_uf', 'tbl_uf.id_uf', '=', 'tbl_enderecos.id_uf')
                        ->select(
                             'tbl_enderecos.rua as Rua',
     						'tbl_enderecos.cep as CEP',
@@ -19,7 +20,7 @@ class EnderecoController extends Controller
     						'tbl_enderecos.complemento as Complemento',
    							'tbl_enderecos.bairro as Bairro',
     						'tbl_enderecos.cidade as Cidade',
-    					    'tbl_enderecos.uf as Unidade Federativa'
+    					    'tbl_uf.uf as Unidade Federativa'
                        )->get();
 
         return response()->json($address);

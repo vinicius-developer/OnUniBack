@@ -22,7 +22,7 @@ class TblEnderecos extends Migration
             $table->string('complemento', 25)->nullable();
             $table->string('cidade', 40);
             $table->string('bairro', 40);
-            $table->char('uf', 2);
+            $table->unsignedTinyInteger('id_uf');
             $table->timestamps();
         });
     }

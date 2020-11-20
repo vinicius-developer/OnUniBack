@@ -29,8 +29,14 @@ class Endereco extends Model{
         'created_at'
     ];
 
-    public function ong() {
+    public function ong() 
+    {
         return $this->belongsTo(Ong::class, 'id_ongs', 'id_ongs');
+    }
+
+    public function uf() 
+    {
+        return $this->belongsTo(Uf::class, 'id_uf', 'if_uf');
     }
 
     
