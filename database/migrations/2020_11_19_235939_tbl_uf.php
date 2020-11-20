@@ -14,7 +14,7 @@ class TblUf extends Migration
     public function up()
     {
         Schema::create('tbl_uf', function (Blueprint $table) {
-            $table->tinyIncrements('id_uf');
+            $table->smallIncrements('id_uf');
             $table->char('uf', 2);
         });
     }
