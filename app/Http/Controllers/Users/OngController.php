@@ -69,7 +69,7 @@ class OngController extends Controller
 		$tbl_enderecos->complemento = $request->complemento;
 		$tbl_enderecos->cidade = $request->cidade;
 		$tbl_enderecos->bairro = $request->bairro;
-		$tbl_enderecos->uf = $request->uf;
+		$tbl_enderecos->id_uf = $request->uf;
 		$createEndereco = $tbl_enderecos->save();
 
 		for($i = 0; $i < count($request->telefones); $i++) {

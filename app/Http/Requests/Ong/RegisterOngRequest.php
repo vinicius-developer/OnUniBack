@@ -37,18 +37,33 @@ class RegisterOngRequest extends FormRequest
             'complemento' => 'max:25',
             'cidade' => 'required|max:40',
             'bairro' => 'required|max:40',
-            'uf' => 'required|max:2|min:2',
+            'uf' => 'required|integer',
             'telefones' => 'required'
         ];
     }
 
     public function messages() {
         return [
-            'cnpj.cnpj' => 'O campo CNPJ é inválido',
-            'cep.formato_cep' => 'O campo CEP é inválido',
-            'email.unique' => 'Esse e-mail já foi cadastrado em nosso sistema',
+            'causa_socail.required' => 'necessário ser preenchido',
+            'cnpj.required' => 'necessário ser preenchido',
+            'nome_fantasia.required' => 'necessário ser preenchido',
+            'razao_social.required' => 'necessário ser preenchido',
+            'email.required' => 'necessário ser preenchido',
+            'password.required' => 'necessário ser preenchido',
+            'descricao.required' => 'necessário ser preenchido',
+            'rua.required' => 'necessário ser preenchido',
+            'cep.required' => 'necessário ser preenchido',
+            'numero.required' => 'necessário ser preenchido',
+            'complemento.required' => 'necessário ser preenchido',
+            'cidade.required' => 'necessário ser preenchido',
+            'bairro.required' => 'necessário ser preenchido',
+            'uf.required' => 'necessário ser preenchido',
+            'talefones.required' => 'necessário ser preenchido',
+            'cnpj.cnpj' => 'é inválido',
+            'cep.formato_cep' => 'é inválido',
+            'email.unique' => 'já foi cadastrado em nosso sistema',
             'cnpj.unique' => [
-                "comment" => 'O CNPJ da sua ong já está cadastrado em nosso sitema, caso necessário entre em contato conosco',
+                "comment" => 'da sua ong já está cadastrado em nosso sitema, caso necessário entre em contato conosco',
                 "contact" => 'onuniContato@gmail.com'
             ]
         ];
