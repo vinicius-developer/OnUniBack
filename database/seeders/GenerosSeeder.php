@@ -27,6 +27,10 @@ class GenerosSeeder extends Seeder
         ]);
 
         Genero::create([
+            'nome_generos' => 'Intersexual'
+        ]);
+
+        Genero::create([
             'nome_generos' => 'Outros',
         ]);
 

@@ -51,6 +51,15 @@ class OngController extends Controller
 		// 	]);
 		// }
 
+		if(!count($request->telefones)) {
+			return response()->json([
+				"message" => "The given data was invalid.",
+  				"errors" => [
+					"telefones" => "Pelo menos um telefone deve ser preenchido"
+				]
+			]);
+		}
+
         $tbl_ongs->id_ongs = md5(uniqid(rand(), 'true'));
 		$tbl_ongs->id_causas_sociais = $request->causa_social;
 		$tbl_ongs->cnpj = $request->cnpj;
@@ -85,22 +94,12 @@ class OngController extends Controller
 			$tbl_relacao_telefones->save();
 		}
 		
-		if($createOng && $createEndereco) {
-			//Mail::send(new ResgiterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
-			//Mail::send(new ResgiterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
-			return response()->json([
-				"message" => 'Sua conta foi criado com sucesso por favor verifique o e-mail da ong que está cadastrado no CNPJ',
-				"errors" => [],
-			]);
-		} else {
-			return response()->json([
-				"message" => 'Não foi possível concluir o cadastro',
-				"errors" => [
-					"Estamos com algum problema em nosso sistema"
-				],
-			]);
-		}
-
+		//Mail::send(new ResgiterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
+		//Mail::send(new ResgiterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
+		return response()->json([
+			"message" => 'Sua conta foi criado com sucesso! Por favor verifique o e-mail da ong que está cadastrado no CNPJ',
+			"errors" => [],
+		]);
 	}
 	
 	public function activate($id) 
