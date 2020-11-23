@@ -68,7 +68,6 @@ class ReportController extends Controller
         }
     }
 
-
     protected function reportadoExists($tabela, $colunm, $id) 
     {
         return DB::table($tabela)
