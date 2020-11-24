@@ -24,8 +24,17 @@ class LoginOngRequest extends FormRequest
     public function rules()
     {
         return [
-            'cnpj' => 'required|max:80|formato_cnpj',
+            'userkey' => 'required|cnpj|formato_cnpj',
             'password' => 'required'
+        ];
+    }
+
+    public function messages() {
+        return [
+            'userkey.required' => 'O campo CNPJ precisa ser preenchido',
+            'userkey.cnpj' => "CNPJ não é válido",
+            'userkey.formato_cnpj' => "O formato do cnpj não é válido",
+            'passoword.required' => "O campo password precisa ser preenchido",
         ];
     }
 }

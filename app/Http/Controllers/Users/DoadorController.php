@@ -58,7 +58,7 @@ class DoadorController extends Controller
         }
 
         if($createDoador) {
-			//Mail::send(new RegisterDoadorMail($request->email, $request->nome, $request->sobrenome, $tbl_doadores->id_doadores)); // ATIVAR PARA TESTES
+			Mail::send(new RegisterDoadorMail($request->email, $request->nome, $request->sobrenome, $tbl_doadores->id_doadores)); // ATIVAR PARA TESTES
             return response()->json([
 				"message" => 'Sua conta foi criado com sucesso por favor verifique seu e-mail',
 				"errors" => [],
@@ -90,13 +90,17 @@ class DoadorController extends Controller
 
     public function login(LoginDoadorRequest $request)
     {
-		$credential = $request->only(['cpf', 'password']);
-
+        $credential['cpf'] = $request->userkey;
+        $credential['password'] = $request->password;
 		$credential['status'] = 'true';
 
 	    if (!$token = Auth::guard('doador')->attempt($credential)) {
-            return response()->json(
-				['errors' => 'Seus dados não foram encontrados em nosso sistema'], 401);
+		    return response()->json([
+                    'message' => 'Não foi possível permitir a sua entrada',
+                    'errors' => [ 
+                        'password' => 'Seus dados não foram encontrados em nosso sistema'
+                    ]
+                ], 401);
 		}
 
 		$log = new LogTokenJwt();

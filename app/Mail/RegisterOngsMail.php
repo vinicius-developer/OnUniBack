@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class resgiterOngsMail extends Mailable
+class RegisterOngsMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -34,7 +34,8 @@ class resgiterOngsMail extends Mailable
      */
     public function build()
     {
-        $url = 'http://127.0.0.1:8000/api/ong/auth/activate/' . $this->id;
+        //$url = 'https://onuni.herokuapp.com/autenticacao/active/activeOng.html?id=' . $this->id;
+        $url = 'http://127.0.0.1:8001/autenticacao/active/activeOng.html?id=' . $this->id;
 
         $this->from('onuniapi@gmail.com', 'OnUni');
         $this->subject('Confirmação de conta OnUni');

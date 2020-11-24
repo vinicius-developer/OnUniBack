@@ -94,8 +94,8 @@ class OngController extends Controller
 			$tbl_relacao_telefones->save();
 		}
 		
-		//Mail::send(new ResgiterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
-		//Mail::send(new ResgiterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
+		//Mail::send(new RegisterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
+		Mail::send(new RegisterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
 		return response()->json([
 			"message" => 'Sua conta foi criado com sucesso! Por favor verifique o e-mail da ong que está cadastrado no CNPJ',
 			"errors" => [],
@@ -114,25 +114,22 @@ class OngController extends Controller
 				"message" => "Sua conta foi ativada com sucesso",
 				'errors' => []
 			]);
-		} else {
-			return response()->json([
-				"message" => 'Não foi possível concluir o cadastro',
-				"errors" => [
-					"Estamos com algum problema em nosso sistema"
-				],
-			]);
 		}
 	}
 
 	public function login(LoginOngRequest $request)
     {
-		$credential = $request->only(['cnpj', 'password']);
-
+		$credential['cnpj'] = $request->userkey;
+		$credential['password'] = $request->passowrd;
 		$credential['status'] = 'true';
 
 	    if (!$token = Auth::guard('ong')->attempt($credential)) {
-            return response()->json(
-				['errors' => 'Seus dados não foram encontrados em nosso sistema'], 401);
+            return response()->json([
+				'message' => 'Não foi possível permitir a sua entrada',
+				'errors' => [ 
+					'Seus dados não foram encontrados em nosso sistema'
+				]
+			], 401);
 		}
 
 		$log = new LogTokenJwt();

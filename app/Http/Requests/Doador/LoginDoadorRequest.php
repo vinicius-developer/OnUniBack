@@ -24,8 +24,17 @@ class LoginDoadorRequest extends FormRequest
     public function rules()
     {
         return [
-            "cpf" => "required|formato_cpf",
+            "userkey" => "required|cpf|formato_cpf",
             "password" => "required"
+        ];
+    }
+
+    public function messages() {
+        return [
+            'userkey.required' => 'O campo CPF precisa ser preenchido',
+            'userkey.cpf' => "CPF não é válido",
+            'userkey.formato_cpf' => "O formato do CPF não é válido",
+            'passoword.required' => "O campo password precisa ser preenchido",
         ];
     }
 }
