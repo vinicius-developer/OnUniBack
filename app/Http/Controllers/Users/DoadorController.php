@@ -58,7 +58,7 @@ class DoadorController extends Controller
         }
 
         if($createDoador) {
-			Mail::send(new RegisterDoadorMail($request->email, $request->nome, $request->sobrenome, $tbl_doadores->id_doadores)); // ATIVAR PARA TESTES
+			//Mail::send(new RegisterDoadorMail($request->email, $request->nome, $request->sobrenome, $tbl_doadores->id_doadores)); // ATIVAR PARA TESTES
             return response()->json([
 				"message" => 'Sua conta foi criado com sucesso por favor verifique seu e-mail',
 				"errors" => [],

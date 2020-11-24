@@ -38,7 +38,7 @@ class RegisterDoadorRequest extends FormRequest
         return [
             'nome.required' => 'O campo nome é necessário ser preenchido',
             'nome.max' => 'Seu nome é muito longo para nossa base de dados',
-            'sobrenome.required' => 'O campo sobrenome é becessário',
+            'sobrenome.required' => 'O campo sobrenome é necessário',
             'sobrenome.max' => 'Seu sobrenome é muito longo para nossa base dados',
             'email.required' => 'O campo e-mail é necessário ser preenchido',
             'email.max' => 'O campo e-mail é muito longo para nossa base de dados',
@@ -51,7 +51,7 @@ class RegisterDoadorRequest extends FormRequest
             'password.confirmed' => 'Os campos de senha não são iguais',
             'genero.required' => 'É necessário preencher o campos gênero',
             'genero.integer' => 'O campo gênero precisa ser um inteiro',
-            'telefones.required' => 'O campo telefone é necessário ser preenchido'
+            'telefones.required' => 'Pelo menos um telefore precisa ser preenchido'
         ];
     }
 }

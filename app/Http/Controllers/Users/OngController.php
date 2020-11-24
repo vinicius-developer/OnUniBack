@@ -95,7 +95,7 @@ class OngController extends Controller
 		}
 		
 		//Mail::send(new RegisterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
-		Mail::send(new RegisterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
+		//Mail::send(new RegisterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES
 		return response()->json([
 			"message" => 'Sua conta foi criado com sucesso! Por favor verifique o e-mail da ong que está cadastrado no CNPJ',
 			"errors" => [],
@@ -105,6 +105,8 @@ class OngController extends Controller
 	public function activate($id) 
 	{
 		$user = $this->ong->select('*')->where('id_ongs','=', $id)->first();
+
+		
 
 		$user->status = 'true';
 		$user->save();
@@ -171,13 +173,13 @@ class OngController extends Controller
 						->join('tbl_causas_sociais', 'tbl_ongs.id_causas_sociais', '=', 'tbl_causas_sociais.id_causas_sociais')
 						->where('tbl_ongs.status', '=', 'true')
 				        ->select(
-								'tbl_ongs.id_ongs as Numero de Registro',
-    							'tbl_causas_sociais.nome_causa_social as Causa Social',
-    							'tbl_ongs.cnpj as CNPJ',
-    							'tbl_ongs.nome_fantasia as Nome Fantasia',
-    							'tbl_ongs.email as E-mail',
-								'tbl_ongs.descricao_ong as Descricao',
-                        		'tbl_ongs.img_perfil as Imagem de Perfil'
+								'tbl_ongs.id_ongs as id',
+    							'tbl_causas_sociais.nome_causa_social as nomeCausaSocial',
+    							'tbl_ongs.cnpj as cnpj',
+								'tbl_ongs.nome_fantasia as nomeFantasia',
+    							'tbl_ongs.email as email',
+								'tbl_ongs.descricao_ong as descricao',
+                        		'tbl_ongs.img_perfil as img'
 						)->paginate(5);
 
 		return response()->json($listOngs);
