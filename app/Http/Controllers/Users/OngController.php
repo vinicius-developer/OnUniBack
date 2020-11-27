@@ -122,7 +122,7 @@ class OngController extends Controller
 	public function login(LoginOngRequest $request)
     {
 		$credential['cnpj'] = $request->userkey;
-		$credential['password'] = $request->passowrd;
+		$credential['password'] = $request->password;
 		$credential['status'] = 'true';
 
 	    if (!$token = Auth::guard('ong')->attempt($credential)) {
@@ -189,17 +189,24 @@ class OngController extends Controller
     {
         $ong = $this->ong
                     ->select(
-                        'tbl_causas_sociais.nome_causa_social',
-                        'tbl_ongs.cnpj',
-                        'tbl_ongs.nome_fantasia',
-                        'tbl_ongs.email',
-                        'tbl_ongs.descricao_ong',
-                        'tbl_ongs.img_perfil'
+    					'tbl_causas_sociais.nome_causa_social as nomeCausaSocial',
+						'tbl_ongs.nome_fantasia as nomeFantasia',
+   						'tbl_ongs.email as email',
+						'tbl_ongs.descricao_ong as descricao',
+						'tbl_ongs.img_perfil as img'
                     )->join('tbl_causas_sociais', 'tbl_causas_sociais.id_causas_sociais', '=', 'tbl_ongs.id_causas_sociais')
 					->where('tbl_ongs.id_ongs', '=', $id)
 					->first();
 
-        return response()->json([$ong]);
+        if($ong) {
+			return response()->json([$ong]);
+		} else {
+			return response()->json([
+				'message' => 'Esses dados não foram encontrados',
+				'error' => [
+					'Não conseguimos encontrar essa ong em nosso sistema'
+				]], 400);
+		}
     }
 
 	protected function respondWithToken($token)

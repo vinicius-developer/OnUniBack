@@ -27,24 +27,30 @@ class ReportController extends Controller
 
         if($request->tipo_usuario_reportado === 'ong') {
             $acusador = Auth::guard('doador')->user();
-            $reportExists = $this->reportExists('tbl_relacao_reports.id_doadores', 'tbl_reports.id_reportado', $acusador->id_doadores, $request->id_reportado);
+            $reportExists = $this->reportExists('tbl_relacao_reports.id_doadores', $acusador->id_doadores, $request->id_reportado);
             $reportadoExists = $this->reportadoExists('tbl_ongs', 'id_ongs', $request->id_reportado);
         } else {
             $acusador = Auth::guard('ong')->user();
-            $reportExists = $this->reportExists('tbl_relacao_reports.id_ongs', 'tbl_reports.id_reportado', $acusador->id_ongs, $request->id_reportado);
+            $reportExists = $this->reportExists('tbl_relacao_reports.id_ongs', $acusador->id_ongs, $request->id_reportado);
             $reportadoExists = $this->reportadoExists('tbl_doadores', 'id_doadores', $request->id_reportado);
         }
 
         if($reportExists) {
             return response()->json([
-                "message" => "Você já reportou esse usuário"
+                "message" => "Erro em reportar usuário",
+                "errors" => [
+                    'Você já reportou esse usuário'
+                ]
             ], 404);
         }
 
         if(!$reportadoExists) {
             return response()->json([
-                "message" => "O id reportado não existe em nossa base de dados"
-            ], 404);
+                "message" => "Erro em reportar usuário",
+                "errors" => [
+                    'Usuário reportado não existe em nossa base de dados'
+                ]
+            ], 401);
         }
 
         $tbl_reports->id_reportado = $request->id_reportado;
@@ -63,9 +69,47 @@ class ReportController extends Controller
 
         if($createReport && $createRelacaoReport) {
             return response()->json([
-                "message" => "Sua reclamação foi salva com sucesso, nós iremos analisá-la"
+                "exists" => true
             ], 200);
         }
+    }
+
+    public function findong($id) 
+    {
+        $acusador = Auth::guard('doador')->user();
+        $reportadoExists = $this->reportadoExists('tbl_ongs', 'id_ongs', $id);
+
+        if(!$reportadoExists) {
+            return response()->json([
+                "message" => "Erro em reportar usuário",
+                "errors" => [
+                    'Usuário reportado não existe em nossa base de dados'
+                ]
+            ], 401);
+        }
+
+        $reportExists = $this->reportExists('tbl_relacao_reports.id_doadores', $acusador->id_doadores, $id);
+
+        return $reportExists ? response()->json(['exists' => true]) : response()->json(['exists' => false]);
+    }
+
+    public function finddoa($id)
+    {
+        $acusador = Auth::guard('ong')->user();
+        $reportadoExists = $this->reportadoExists('tbl_doadores', 'id_doadores', $request->id_reportado);
+
+        if(!$reportadoExists) {
+            return response()->json([
+                "message" => "Erro em reportar usuário",
+                "errors" => [
+                    'Usuário reportado não existe em nossa base de dados'
+                ]
+            ], 401);
+        }
+
+        $reportExists = $this->reportExists('tbl_relacao_reports.id_ongs', $acusador->id_ongs, $id);
+
+        return $reportExists ? response()->json(['exists' => true]) : response()->json(['exists' => false]);
     }
 
     protected function reportadoExists($tabela, $colunm, $id) 
@@ -75,12 +119,12 @@ class ReportController extends Controller
                    ->exists();    
     }
 
-    protected function reportExists($colunmAcusador, $colunmReportado, $idAcusador, $idReportado)
+    protected function reportExists($colunmAcusador, $idAcusador, $idReportado)
     {
         return DB::table('tbl_relacao_reports')
                    ->join('tbl_reports', 'tbl_relacao_reports.id_reports', '=', 'tbl_reports.id_reports')
                    ->where($colunmAcusador, '=', $idAcusador)
-                   ->where($colunmReportado, '=', $idReportado)
+                   ->where('tbl_reports.id_reportado', '=', $idReportado)
                    ->exists();
 
     }

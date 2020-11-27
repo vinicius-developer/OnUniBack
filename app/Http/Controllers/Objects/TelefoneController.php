@@ -17,9 +17,17 @@ class TelefoneController extends Controller
                             'tbl_ongs.id_ongs', '=', 'tbl_relacao_telefones.id_ongs')
                         ->where('tbl_relacao_telefones.id_ongs', '=', $id_ongs)
                         ->select(
-                            'tbl_telefones.numero_telefone as Numero de Telefone'
+                            'tbl_telefones.numero_telefone as numTel'
                         )->get();
 
-        return response()->json($telephone);
+        if(count($telephone) > 0) {
+            return response()->json($telephone);
+        } else {
+            return response()->json([
+                'message' => 'Esses dados não foram encontrados',
+				'error' => [
+					'Não conseguimos encontrar telefones dessa ong em nosso sistema sistema'
+			]], 400); 
+        }
     }
 }

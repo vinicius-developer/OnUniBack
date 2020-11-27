@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\OngFavorita;
 use App\Models\Ong;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\OngFavorita\RegisterOngFavoritaRequest;
 
 
 class OngFavoritaController extends Controller
@@ -20,25 +19,17 @@ class OngFavoritaController extends Controller
         $this->ongs_favoritas = new OngFavorita();
     }
 
-    public function switch(RegisterOngFavoritaRequest $request)
+    public function switch($id)
     {
-        $tbl_ongs = new Ong();
+        $users = $this->identify($id);      
 
-        $doador = Auth::guard('doador')->user();
-        $ong = $tbl_ongs->where('id_ongs', '=', $request->id_ongs)->first();
+        if(!empty($users['error'])) return $users;
 
-        $followExists = $this->ongs_favoritas
-               ->where('id_ongs', '=', $ong->id_ongs)
-               ->where('id_doadores', '=', $doador->id_doadores)
-               ->exists();
+        $followFind = $this->followFind($users);
 
-        if(!$followExists) {
-            $response = $this->register($doador, $ong);
-        } else {
-            $response = $this->delete($doador, $ong);
-        }
+        !$followFind ? $response = $this->register($users[0], $users[1]) : $response = $this->delete($users[0], $users[1]);
 
-        return $response ? response()->json(["message" => "Salvo!"], 200) : response()->json(["message" => "Erro"],400);
+        return response()->json(['exists' => $response], 200);
     }
 
     public function index() 
@@ -58,23 +49,62 @@ class OngFavoritaController extends Controller
         return response()->json([$query]);
     }
 
+    public function find($id)
+    {
+        $users = $this->identify($id);
+
+        if(!empty($users['error'])) return response()->json([$users]);
+
+        $followFind = $this->followFind($users);
+
+        return $followFind ? response()->json(['exists' => true], 200) : response()->json(['exists' => false], 200);
+
+    }
+
     protected function delete($doador, $ong)
     {
-        $followDelete = $this->ongs_favoritas
-                            ->where('id_ongs', '=', $ong->id_ongs)
-                            ->where('id_doadores', '=', $doador->id_doadores)
-                            ->delete();
+        $this->ongs_favoritas
+            ->where('id_ongs', '=', $ong->id_ongs)
+            ->where('id_doadores', '=', $doador->id_doadores)
+            ->delete();
         
-        return $followDelete ? true : false;
+        return false;
     }
 
     protected function register($doador, $ong)
     {
         $this->ongs_favoritas->id_doadores = $doador->id_doadores;
         $this->ongs_favoritas->id_ongs = $ong->id_ongs; 
-        $createRegister = $this->ongs_favoritas->save();
+        $this->ongs_favoritas->save();
 
-        return $createRegister ? true : false;
+        return true ;
+    }
+
+    protected function identify($id) 
+    {
+        $tbl_ongs = new Ong();
+
+        $doador = Auth::guard('doador')->user();
+        $ong = $tbl_ongs->where('id_ongs', '=', $id)->first();
+
+        if(!$ong) {
+            return [
+                'message' => 'Informação inexistente',
+                'error' => [
+                    'Ong não está registrada em nossa base de dados'
+                ]];
+        } else {
+            return [$doador, $ong];
+        }
+
+    }
+
+    protected function followFind($users) 
+    {
+        return $this->ongs_favoritas
+                   ->where('id_doadores', '=', $users[0]->id_doadores)
+                   ->where('id_ongs', '=', $users[1]->id_ongs)
+                   ->exists();
     }
 
 }

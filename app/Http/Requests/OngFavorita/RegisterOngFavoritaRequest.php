@@ -27,4 +27,5 @@ class RegisterOngFavoritaRequest extends FormRequest
             "id_ongs" => "required"
         ];
     }
+
 }
