@@ -36,7 +36,7 @@ class OngController extends Controller
         $responsePassword = $validators->validatorPassword($request->password);
 
         if($responsePassword) {
-            return response()->json($responsePassword);
+            return response()->json($responsePassword, 401);
         }
 
 		//$responseReceitaWs = $this->receitaWs->requestGetWs($cnpjOnlyNumbers); // NECESSÀRIO SOMENTE EM PRODUÇÃO
