@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Objects;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListaPedidosOng\RegisterListaPedidosOngRequest;
 use App\Models\ListaPedidoOng;
+use App\Models\Ong;
 use Illuminate\Support\Facades\Auth;
 
 class ListaPedidoOngController extends Controller
@@ -39,19 +40,28 @@ class ListaPedidoOngController extends Controller
         }
     }
 
-    public function index() {
-        $user = $this->checkOng();
+    public function index($id) 
+    {
+        $user = $this->ongExists($id);
 
-        if(isset($user['message'])) return response()->json($user, 401);
+        if(!$user) {
+            return response()->json([
+                'message' => 'Erro na busca em nosso base de dados',
+                'erros' => [
+                    'A ong inserida não existe em nossa base de dados'
+                ]], 400);
+        } 
 
         $items = $this->lista_pedidos_ongs
                         ->select(
-                            'tbl_listas_pedidos_ongs.id_listas_pedidos_ongs',
-                            'tbl_listas_pedidos_ongs.nome_item',
-                            'tbl_listas_pedidos_ongs.id_lojas'
+                            'tbl_listas_pedidos_ongs.id_listas_pedidos_ongs as idListaPedidos',
+                            'tbl_listas_pedidos_ongs.nome_item as nomeItem',
+                            'tbl_lojas.nome_fantasia_loja as nomeFantasiaLoja',
+                            'tbl_lojas.link_loja as linkLoja'
                         )
                         ->join('tbl_ongs', 'tbl_ongs.id_ongs', '=', 'tbl_listas_pedidos_ongs.id_ongs')
-                        ->where('tbl_listas_pedidos_ongs.id_ongs', '=', $user->id_ongs)
+                        ->join('tbl_lojas', 'tbl_lojas.id_lojas', '=', 'tbl_listas_pedidos_ongs.id_lojas')
+                        ->where('tbl_listas_pedidos_ongs.id_ongs', '=', $id)
                         ->paginate(5);
         if($items) {
             return response()->json($items, 200);
@@ -87,9 +97,18 @@ class ListaPedidoOngController extends Controller
 
         if(!isset($user->id_ongs)) {
             return [
-                "message" => "Você precisa ser uma ong para cadastrar um item na sua lista de desejos",
+                "message" => "Você precisa ser uma ong para alterar a lista de desejos",
             ];
         }
+
+        return $user;
+    }
+
+    protected function ongExists($id) 
+    {
+        $ong = new Ong();
+
+        $user = $ong->where('id_ongs', '=', $id)->exists();
 
         return $user;
     }

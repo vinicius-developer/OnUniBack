@@ -30,7 +30,7 @@ Route::prefix('ong')->group(function() {
 	});
 	Route::prefix('wishlist')->namespace('App\Http\Controllers\Objects')->middleware('check-token')->group(function() {
 		Route::post('register', 'ListaPedidoOngController@register');
-		Route::get('index', 'ListaPedidoOngController@index');
+		Route::get('index/{id}', 'ListaPedidoOngController@index');
 		Route::delete('delete/{id}', 'ListaPedidoOngController@delete');
 	});
 });
@@ -63,10 +63,13 @@ Route::prefix('info')->middleware('check-token')->group(function() {
 Route::prefix('actions')->middleware('check-token')->group(function() {	
 	Route::prefix('report')->namespace('App\Http\Controllers\Actions')->group(function(){
 		Route::post('register', 'ReportController@register');
+		Route::get('findong/{id}', 'ReportController@findong');
+		Route::get('finddoa/{id}', 'ReportController@finddoa');
 	});
 	Route::prefix('follow')->namespace('App\Http\Controllers\Actions')->group(function() {
-		Route::get('switch', 'OngFavoritaController@switch');
+		Route::get('switch/{id}', 'OngFavoritaController@switch');
 		Route::get('index', 'OngFavoritaController@index');
+		Route::get('find/{id}', 'OngFavoritaController@find');
 	});
 });
 

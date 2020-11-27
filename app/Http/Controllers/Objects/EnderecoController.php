@@ -20,9 +20,17 @@ class EnderecoController extends Controller
     						'tbl_enderecos.complemento as Complemento',
    							'tbl_enderecos.bairro as Bairro',
     						'tbl_enderecos.cidade as Cidade',
-    					    'tbl_uf.uf as Unidade Federativa'
+    					    'tbl_uf.uf as UF'
                        )->get();
 
-        return response()->json($address);
+        if(count($address)) {
+            return response()->json($address);
+        } else {
+            return response()->json([
+                'message' => 'Esses dados não foram encontrados',
+				'error' => [
+					'Não conseguimos encontrar o endereço dessa ong'
+			]], 400); 
+        }
     }
 }
