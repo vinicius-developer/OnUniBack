@@ -36,7 +36,7 @@ class OngController extends Controller
         $responsePassword = $validators->validatorPassword($request->password);
 
         if($responsePassword) {
-            return response()->json($responsePassword);
+            return response()->json($responsePassword, 400);
         }
 
 		//$responseReceitaWs = $this->receitaWs->requestGetWs($cnpjOnlyNumbers); // NECESSÀRIO SOMENTE EM PRODUÇÃO
@@ -101,12 +101,10 @@ class OngController extends Controller
 			"errors" => [],
 		]);
 	}
-	
+
 	public function activate($id) 
 	{
 		$user = $this->ong->select('*')->where('id_ongs','=', $id)->first();
-
-		
 
 		$user->status = 'true';
 		$user->save();

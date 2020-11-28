@@ -9,10 +9,12 @@ use App\Models\RelacaoTelefone;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Doador\RegisterDoadorRequest;
 use App\Http\Requests\Doador\LoginDoadorRequest;
+use App\Http\Requests\Doador\ImageDoadorRequest;
 use App\Utils\Tools\Validators;
-use Illuminate\Http\Request;
 use App\Mail\RegisterDoadorMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Mail;
 
 class DoadorController extends Controller
@@ -87,6 +89,25 @@ class DoadorController extends Controller
 			]);
 		}
     }
+
+    public function changeImage(ImageDoadorRequest $request)
+    {
+        $user = Auth::guard('doador')->user();
+        if($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            Storage::delete([$user->img_perfil]);
+            $user->img_perfil = $request->file('photo')->store('pothoPerfilDoador');
+            $response = $user->save();
+        } else {
+            return response()->json([
+                'message' => 'Não foi possível atualizar sua imagem',
+                'error' => [
+                    "O arquivo inserido não é válido"
+                ]], 422);
+        }
+        return  $response ? response()->json(['exists' => $response], 200) : response()->json(['exists' => $response], 500);
+    }
+
+
 
     public function login(LoginDoadorRequest $request)
     {

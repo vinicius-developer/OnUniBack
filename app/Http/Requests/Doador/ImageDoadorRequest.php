@@ -4,7 +4,7 @@ namespace App\Http\Requests\Doador;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginDoadorRequest extends FormRequest
+class ImageDoadorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,18 +24,17 @@ class LoginDoadorRequest extends FormRequest
     public function rules()
     {
         return [
-            "userkey" => "required|cpf|formato_cpf",
-            "password" => "required"
+            "photo" => 'required|image'
         ];
     }
+
 
     public function messages() 
     {
         return [
-            'userkey.required' => 'O campo CPF precisa ser preenchido',
-            'userkey.cpf' => "CPF não é válido",
-            'userkey.formato_cpf' => "O formato do CPF não é válido",
-            'passoword.required' => "O campo password precisa ser preenchido",
+            'photo.required' => 'Campo foto não foi inserido',
+            'photo.image' => 'O arquivo inserido não é uma foto'
         ];
     }
+
 }

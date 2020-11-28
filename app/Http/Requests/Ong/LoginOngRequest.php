@@ -29,7 +29,8 @@ class LoginOngRequest extends FormRequest
         ];
     }
 
-    public function messages() {
+    public function messages() 
+    {
         return [
             'userkey.required' => 'O campo CNPJ precisa ser preenchido',
             'userkey.cnpj' => "CNPJ não é válido",

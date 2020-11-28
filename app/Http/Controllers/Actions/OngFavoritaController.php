@@ -41,10 +41,10 @@ class OngFavoritaController extends Controller
                     ->join('tbl_ongs', 'tbl_ongs_favoritas.id_ongs', '=', 'tbl_ongs.id_ongs')
                     ->select(
                         'tbl_ongs.id_ongs',
-                        'tbl_ongs.email',
+                        'tbl_ongs.descricao_ong',
                         'tbl_ongs.nome_fantasia',
                         'tbl_ongs.img_perfil'
-                    )->paginate(10);
+                    )->paginate(3);
 
         return response()->json([$query]);
     }

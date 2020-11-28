@@ -34,7 +34,8 @@ class RegisterDoadorRequest extends FormRequest
         ];
     }
 
-    public function messages() {
+    public function messages() 
+    {
         return [
             'nome.required' => 'O campo nome é necessário ser preenchido',
             'nome.max' => 'Seu nome é muito longo para nossa base de dados',

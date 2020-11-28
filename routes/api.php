@@ -28,6 +28,9 @@ Route::prefix('ong')->group(function() {
 		Route::get('logout', 'OngController@logout');
 		Route::get('me', 'OngController@me');
 	});
+	// Route::prefix('image')->namespace('App\Http\Controllers\Users')->middleware('check-token')->group(function() {
+	// 	Route::put('change', 'OngController@changeImage');
+	// });
 	Route::prefix('wishlist')->namespace('App\Http\Controllers\Objects')->middleware('check-token')->group(function() {
 		Route::post('register', 'ListaPedidoOngController@register');
 		Route::get('index/{id}', 'ListaPedidoOngController@index');
@@ -41,6 +44,11 @@ Route::prefix('doador')->group(function() {
 		Route::post('login', 'DoadorController@login');
 		Route::put('activate/{id}', 'DoadorController@activate');
 	});
+
+	Route::prefix('image')->namespace('App\Http\Controllers\Users')->middleware('check-token')->group(function() {
+		Route::post('change', 'DoadorController@changeImage');
+	});
+
 	Route::prefix('auth')->namespace('App\Http\Controllers\Users')->middleware('check-token')->group(function(){
 		Route::get('logout', 'DoadorController@logout');
 		Route::get('me', 'DoadorController@me');

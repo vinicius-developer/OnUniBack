@@ -42,7 +42,8 @@ class RegisterOngRequest extends FormRequest
         ];
     }
 
-    public function messages() {
+    public function messages() 
+    {
         return [
             'causa_social.required' => 'A Causa Social deve ser preenchida',
             'causa_social.integer' => 'O campo causa Social deve ser um número',
