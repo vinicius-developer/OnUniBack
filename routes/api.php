@@ -28,13 +28,14 @@ Route::prefix('ong')->group(function() {
 		Route::get('logout', 'OngController@logout');
 		Route::get('me', 'OngController@me');
 	});
-	// Route::prefix('image')->namespace('App\Http\Controllers\Users')->middleware('check-token')->group(function() {
-	// 	Route::put('change', 'OngController@changeImage');
-	// });
+	Route::prefix('change')->namespace('App\Http\Controllers\Users')->middleware('check-token')->group(function() {
+		Route::post('image', 'OngController@changeImage');
+		Route::put('info', 'OngController@changeInfo');
+	});
 	Route::prefix('wishlist')->namespace('App\Http\Controllers\Objects')->middleware('check-token')->group(function() {
 		Route::post('register', 'ListaPedidoOngController@register');
-		Route::get('index/{id}', 'ListaPedidoOngController@index');
 		Route::delete('delete/{id}', 'ListaPedidoOngController@delete');
+		Route::get('index', 'ListaPedidoOngController@indexUsr');
 	});
 });
 
@@ -63,8 +64,11 @@ Route::prefix('info')->middleware('check-token')->group(function() {
 		});
 	});
 	Route::prefix('objects')->namespace('App\Http\Controllers\Objects')->group(function() {
-		Route::get('telephone/list/{id}', 'TelefoneController@index');
-		Route::get('address/list/{id}', 'EnderecoController@index');
+		Route::get('telephone/list/{id}', 'TelefoneController@indexDoa');
+		Route::get('telephone/me/list', 'TelefoneController@indexOng');
+		Route::get('address/list/{id}', 'EnderecoController@indexDoa');
+		Route::get('address/me/list', 'EnderecoController@indexOng');
+		Route::get('index/list/{id}', 'ListaPedidoOngController@indexDoa');
 	});	
 });	
 

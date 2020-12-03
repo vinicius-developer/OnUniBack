@@ -19,7 +19,6 @@ class TblListasPedidosOngs extends Migration
 			$table->unsignedInteger('id_lojas');
 			$table->string('nome_item', 40);
 			$table->timestamps();
-			
 		});
     }
 

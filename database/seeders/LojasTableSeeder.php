@@ -48,6 +48,5 @@ class LojasTableSeeder extends Seeder
             'nome_fantasia_loja' => 'C&A',
             'link_loja' => 'https://www.cea.com.br/'
         ]);
-
     }
 }

@@ -40,7 +40,7 @@ class ListaPedidoOngController extends Controller
         }
     }
 
-    public function index($id) 
+    public function indexDoa($id) 
     {
         $user = $this->ongExists($id);
 
@@ -52,23 +52,29 @@ class ListaPedidoOngController extends Controller
                 ]], 400);
         } 
 
-        $items = $this->lista_pedidos_ongs
-                        ->select(
-                            'tbl_listas_pedidos_ongs.id_listas_pedidos_ongs as idListaPedidos',
-                            'tbl_listas_pedidos_ongs.nome_item as nomeItem',
-                            'tbl_lojas.nome_fantasia_loja as nomeFantasiaLoja',
-                            'tbl_lojas.link_loja as linkLoja'
-                        )
-                        ->join('tbl_ongs', 'tbl_ongs.id_ongs', '=', 'tbl_listas_pedidos_ongs.id_ongs')
-                        ->join('tbl_lojas', 'tbl_lojas.id_lojas', '=', 'tbl_listas_pedidos_ongs.id_lojas')
-                        ->where('tbl_listas_pedidos_ongs.id_ongs', '=', $id)
-                        ->paginate(5);
+        $items = $this->queryIndexList($id);
+
         if($items) {
             return response()->json($items, 200);
         } else {
             return response()->json([
                 "message" => "Estamos com preblemas em nosso sitema"
-            ], 404);
+            ], 500);
+        }
+    }
+
+    public function indexUsr() 
+    {
+        $user = Auth::guard('ong')->user();
+
+        $items = $this->queryIndexList($user->id_ongs);
+
+        if($items) {
+            return response()->json($items, 200);
+        } else {
+            return response()->json([
+                "message" => "Estamos com problemas em nosso sitema"
+            ], 500);
         }
     }
 
@@ -111,5 +117,20 @@ class ListaPedidoOngController extends Controller
         $user = $ong->where('id_ongs', '=', $id)->exists();
 
         return $user;
+    }
+
+    protected function queryIndexList($id)
+    {
+        return $this->lista_pedidos_ongs
+                    ->select(
+                        'tbl_listas_pedidos_ongs.id_listas_pedidos_ongs as idListaPedidos',
+                        'tbl_listas_pedidos_ongs.nome_item as nomeItem',
+                        'tbl_lojas.nome_fantasia_loja as nomeFantasiaLoja',
+                        'tbl_lojas.link_loja as linkLoja'
+                    )
+                    ->join('tbl_ongs', 'tbl_ongs.id_ongs', '=', 'tbl_listas_pedidos_ongs.id_ongs')
+                    ->join('tbl_lojas', 'tbl_lojas.id_lojas', '=', 'tbl_listas_pedidos_ongs.id_lojas')
+                    ->where('tbl_listas_pedidos_ongs.id_ongs', '=', $id)
+                    ->paginate(5);
     }
 }

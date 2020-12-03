@@ -10,9 +10,12 @@ use App\Models\RelacaoTelefone;
 use App\Models\LogTokenJwt;
 use App\Http\Requests\Ong\RegisterOngRequest;
 use App\Http\Requests\Ong\LoginOngRequest;
+use App\Http\Requests\Ong\ImageOngRequest;
+use App\Http\Requests\Ong\InfoOngRequest;
 use App\Utils\Api\ReceitaWs;
 use App\Utils\Tools\Validators;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Mail\RegisterOngsMail;
 use Mail;
 
@@ -127,7 +130,7 @@ class OngController extends Controller
             return response()->json([
 				'message' => 'Não foi possível permitir a sua entrada',
 				'errors' => [ 
-					'Seus dados não foram encontrados em nosso sistema'
+					'password' => 'Seus dados não foram encontrados em nosso sistema'
 				]
 			], 401);
 		}
@@ -154,15 +157,9 @@ class OngController extends Controller
     {
 		$user = auth('ong')->user();
 
-		$query = $user->select('id_causas_sociais',
-								'cnpj',
-								'nome_fantasia',
-								'razao_social',
-								'email',
-								'descricao_ong',
-								'img_perfil')->first();
+		$ong = $this->infoOng($user->id_ongs);
 
-        return response()->json($query);
+        return response()->json([$ong]);
     }
 	
 	public function index() 
@@ -185,16 +182,7 @@ class OngController extends Controller
 
 	public function find($id)
     {
-        $ong = $this->ong
-                    ->select(
-    					'tbl_causas_sociais.nome_causa_social as nomeCausaSocial',
-						'tbl_ongs.nome_fantasia as nomeFantasia',
-   						'tbl_ongs.email as email',
-						'tbl_ongs.descricao_ong as descricao',
-						'tbl_ongs.img_perfil as img'
-                    )->join('tbl_causas_sociais', 'tbl_causas_sociais.id_causas_sociais', '=', 'tbl_ongs.id_causas_sociais')
-					->where('tbl_ongs.id_ongs', '=', $id)
-					->first();
+        $ong = $this->infoOng($id);
 
         if($ong) {
 			return response()->json([$ong]);
@@ -205,7 +193,27 @@ class OngController extends Controller
 					'Não conseguimos encontrar essa ong em nosso sistema'
 				]], 400);
 		}
-    }
+	}
+	
+	public function changeImage(ImageOngRequest $request)
+    {
+		$user = Auth::guard('ong')->user();
+
+        Storage::delete([$user->img_perfil]);
+        $user->img_perfil = $request->file('photo')->store('pothoPerfilDoador');
+        $response = $user->save();
+
+        return  $response ? response()->json(['exists' => $response], 200) : response()->json(['exists' => $response], 500);
+	}
+	
+	public function changeInfo(InfoOngRequest $request)
+	{
+		$user = Auth::guard('ong')->user();
+
+		$result = $this->ong->where('id_ongs', '=', $user->id_ongs);
+
+		return $result;
+	}
 
 	protected function respondWithToken($token)
     {
@@ -214,5 +222,20 @@ class OngController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth('ong')->factory()->getTTL() * 200
         ]);
+	}
+
+	protected function infoOng($id)
+	{
+
+		return $this->ong
+					->select(
+						'tbl_causas_sociais.nome_causa_social as nomeCausaSocial',
+						'tbl_ongs.nome_fantasia as nomeFantasia',
+			  			'tbl_ongs.email as email',
+						'tbl_ongs.descricao_ong as descricao',
+						'tbl_ongs.img_perfil as img'
+					)->join('tbl_causas_sociais', 'tbl_causas_sociais.id_causas_sociais', '=', 'tbl_ongs.id_causas_sociais')
+					->where('tbl_ongs.id_ongs', '=', $id)
+					->first();
 	}
 }
