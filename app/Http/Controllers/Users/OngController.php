@@ -210,9 +210,21 @@ class OngController extends Controller
 	{
 		$user = Auth::guard('ong')->user();
 
-		$result = $this->ong->where('id_ongs', '=', $user->id_ongs);
+		$camps = ['nome_fantasia', 'email', 'id_causas_sociais', 'descricao_ong'];
 
-		return $result;
+		if($request->att > (count($camps) - 1)) {
+			return response()->json([
+				'message' => 'Não foi possível atualizar essa informação',
+				'errors' => [
+					'Atributo informado não existe'
+				]
+				], 422);
+		}
+
+
+		$query = $this->ong->where('id_ongs', '=', $user->id_ongs)->update([$camps[$request->att] => $request->info]);
+
+		return $query ? response()->json(['change' => true], 200) : response()->json(['exists' => false], 500);
 	}
 
 	protected function respondWithToken($token)
