@@ -72,7 +72,7 @@ class OngController extends Controller
 		$tbl_ongs->password = bcrypt($request->password); 
 		$tbl_ongs->descricao_ong = $request->descricao;
 		$tbl_ongs->img_perfil = 'pothoPerfilOng/fotoOngPadrao.png';
-		$createOng = $tbl_ongs->save();
+		$tbl_ongs->save();
 
 		$tbl_enderecos->id_ongs = $tbl_ongs->id_ongs;
 		$tbl_enderecos->rua = $request->rua;
@@ -82,7 +82,7 @@ class OngController extends Controller
 		$tbl_enderecos->cidade = $request->cidade;
 		$tbl_enderecos->bairro = $request->bairro;
 		$tbl_enderecos->id_uf = $request->uf;
-		$createEndereco = $tbl_enderecos->save();
+		$tbl_enderecos->save();
 
 		for($i = 0; $i < count($request->telefones); $i++) {
 			$tbl_telefones = new Telefone();
