@@ -48,15 +48,16 @@ class DoadorController extends Controller
         $createDoador = $tbl_doadores->save(); 
 
         for($i = 0; $i < count($request->telefones); $i++){
-            $tbl_telefones = new Telefone();
-            $tbl_telefones->numero_telefone = $request->telefones[$i];
-            $tbl_telefones->save();
 
-            $tbl_relacao_telefone = new RelacaoTelefone();
-            $tbl_relacao_telefone->id_doadores = $tbl_doadores->id_doadores;
-            $tbl_relacao_telefone->id_ongs = null;
-            $tbl_relacao_telefone->id_telefones = $tbl_telefones->id_telefones;
-            $tbl_relacao_telefone->save();
+                $tbl_telefones = new Telefone();
+                $tbl_telefones->numero_telefone = $request->telefones[$i];
+                $tbl_telefones->save();
+
+                $tbl_relacao_telefone = new RelacaoTelefone();
+                $tbl_relacao_telefone->id_doadores = $tbl_doadores->id_doadores;
+                $tbl_relacao_telefone->id_ongs = null;
+                $tbl_relacao_telefone->id_telefones = $tbl_telefones->id_telefones;
+                $tbl_relacao_telefone->save();
         }
 
         if($createDoador) {

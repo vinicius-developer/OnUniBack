@@ -54,15 +54,6 @@ class OngController extends Controller
 		// 	]);
 		// }
 
-		if(!count($request->telefones)) {
-			return response()->json([
-				"message" => "The given data was invalid.",
-  				"errors" => [
-					"telefones" => "Pelo menos um telefone deve ser preenchido"
-				]
-			]);
-		}
-
         $tbl_ongs->id_ongs = md5(uniqid(rand(), 'true'));
 		$tbl_ongs->id_causas_sociais = $request->causa_social;
 		$tbl_ongs->cnpj = $request->cnpj;
@@ -84,18 +75,15 @@ class OngController extends Controller
 		$tbl_enderecos->id_uf = $request->uf;
 		$tbl_enderecos->save();
 
-		for($i = 0; $i < count($request->telefones); $i++) {
-			$tbl_telefones = new Telefone();
-			$tbl_telefones->numero_telefone = $request->telefones[$i];
-		    $tbl_telefones->save();
+		$tbl_telefones = new Telefone();
+		$tbl_telefones->numero_telefone = $request->telefone;
+		$tbl_telefones->save();
 
-			$tbl_relacao_telefones = new RelacaoTelefone();
-			$tbl_relacao_telefones->id_doadores = null;
-			$tbl_relacao_telefones->id_ongs = $tbl_ongs->id_ongs;
-			$tbl_relacao_telefones->id_telefones = $tbl_telefones->id_telefones;
-
-			$tbl_relacao_telefones->save();
-		}
+		$tbl_relacao_telefones = new RelacaoTelefone();
+		$tbl_relacao_telefones->id_doadores = null;
+		$tbl_relacao_telefones->id_ongs = $tbl_ongs->id_ongs;
+		$tbl_relacao_telefones->id_telefones = $tbl_telefones->id_telefones;
+		$tbl_relacao_telefones->save();
 		
 		//Mail::send(new RegisterOngsMail($responseReceitaWs['email'], $responseReceitaWs[nome_fantasia], $tbl_ongs->id_ongs)); // ATIVAR SOMENTE EM PRODUÇÃO
 		//Mail::send(new RegisterOngsMail($request->email, $request->nome_fantasia, $tbl_ongs->id_ongs)); // ATIVAR PARA TESTES

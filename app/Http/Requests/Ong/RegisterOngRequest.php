@@ -38,7 +38,7 @@ class RegisterOngRequest extends FormRequest
             'cidade' => 'required|max:40',
             'bairro' => 'required|max:40',
             'uf' => 'required|integer',
-            'telefones' => 'required'
+            'telefone' => 'required|max:15'
         ];
     }
 
