@@ -26,14 +26,14 @@ class DoadorController extends Controller
         $this->doador = new Doador();
     }
 
-    public function register(RegisterDoadorRequest $request)  
+    public function register(RegisterDoadorRequest $request)
     {
         $tbl_doadores = $this->doador;
         $validators = new Validators();
 
         $responsePassword = $validators->validatorPassword($request->password);
 
-        if($responsePassword) {
+        if ($responsePassword) {
             return response()->json($responsePassword, 400);
         }
 
@@ -45,50 +45,47 @@ class DoadorController extends Controller
         $tbl_doadores->cpf = $request->cpf;
         $tbl_doadores->id_generos = $request->genero;
         $tbl_doadores->img_perfil = 'pothoPerfilDoador/fotoDoadorPadrao.png';
-        $createDoador = $tbl_doadores->save(); 
+        $createDoador = $tbl_doadores->save();
 
-        for($i = 0; $i < count($request->telefones); $i++){
+        $tbl_telefones = new Telefone();
+        $tbl_telefones->numero_telefone = $request->telefone;
+        $tbl_telefones->save();
 
-                $tbl_telefones = new Telefone();
-                $tbl_telefones->numero_telefone = $request->telefones[$i];
-                $tbl_telefones->save();
+        $tbl_relacao_telefone = new RelacaoTelefone();
+        $tbl_relacao_telefone->id_doadores = $tbl_doadores->id_doadores;
+        $tbl_relacao_telefone->id_ongs = null;
+        $tbl_relacao_telefone->id_telefones = $tbl_telefones->id_telefones;
+        $tbl_relacao_telefone->save();
 
-                $tbl_relacao_telefone = new RelacaoTelefone();
-                $tbl_relacao_telefone->id_doadores = $tbl_doadores->id_doadores;
-                $tbl_relacao_telefone->id_ongs = null;
-                $tbl_relacao_telefone->id_telefones = $tbl_telefones->id_telefones;
-                $tbl_relacao_telefone->save();
-        }
-
-        if($createDoador) {
-			//Mail::send(new RegisterDoadorMail($request->email, $request->nome, $request->sobrenome, $tbl_doadores->id_doadores)); // ATIVAR PARA TESTES
+        if ($createDoador) {
+            //Mail::send(new RegisterDoadorMail($request->email, $request->nome, $request->sobrenome, $tbl_doadores->id_doadores)); // ATIVAR PARA TESTES
             return response()->json([
-				"message" => 'Sua conta foi criado com sucesso por favor verifique seu e-mail',
-				"errors" => [],
-			]);
+                "message" => 'Sua conta foi criado com sucesso por favor verifique seu e-mail',
+                "errors" => [],
+            ]);
         }
     }
 
-    public function activate($id) 
-	{
-        $user = $this->doador->select('*')->where('id_doadores','=', $id)->first();
+    public function activate($id)
+    {
+        $user = $this->doador->select('*')->where('id_doadores', '=', $id)->first();
 
         $user->status = 'true';
-		$user->save();
+        $user->save();
 
-		if($user) {
-			return response()->json([
-				"message" => "Sua conta foi ativada com sucesso",
-				'errors' => []
-			]);
-		} else {
-			return response()->json([
-				"message" => 'Não foi possível concluir o cadastro',
-				"errors" => [
-					"Estamos com algum problema em nosso sistema"
-				],
-			]);
-		}
+        if ($user) {
+            return response()->json([
+                "message" => "Sua conta foi ativada com sucesso",
+                'errors' => []
+            ]);
+        } else {
+            return response()->json([
+                "message" => 'Não foi possível concluir o cadastro',
+                "errors" => [
+                    "Estamos com algum problema em nosso sistema"
+                ],
+            ]);
+        }
     }
 
     public function changeImage(ImageDoadorRequest $request)
@@ -108,24 +105,24 @@ class DoadorController extends Controller
     {
         $credential['cpf'] = $request->userkey;
         $credential['password'] = $request->password;
-		$credential['status'] = 'true';
+        $credential['status'] = 'true';
 
-	    if (!$token = Auth::guard('doador')->attempt($credential)) {
-		    return response()->json([
-                    'message' => 'Não foi possível permitir a sua entrada',
-                    'errors' => [ 
-                        'password' => 'Seus dados não foram encontrados em nosso sistema'
-                    ]
-                ], 401);
-		}
+        if (!$token = Auth::guard('doador')->attempt($credential)) {
+            return response()->json([
+                'message' => 'Não foi possível permitir a sua entrada',
+                'errors' => [
+                    'password' => 'Seus dados não foram encontrados em nosso sistema'
+                ]
+            ], 401);
+        }
 
-		$log = new LogTokenJwt();
+        $log = new LogTokenJwt();
 
-		$log->create([
-			'token' => $token,
-			'email' => $credential['cpf'],
-			'tipo_usuario' => 'doador'
-		]);
+        $log->create([
+            'token' => $token,
+            'email' => $credential['cpf'],
+            'tipo_usuario' => 'doador'
+        ]);
 
         return $this->respondWithToken($token);
     }
@@ -139,19 +136,21 @@ class DoadorController extends Controller
 
     public function me()
     {
-		$user = auth('doador')->user();
+        $user = auth('doador')->user();
 
-		$query = $user->select('nome',
-								'sobrenome',
-								'email',
-								'cpf',
-								'img_perfil')->first();
+        $query = $user->select(
+            'nome',
+            'sobrenome',
+            'email',
+            'cpf',
+            'img_perfil'
+        )->first();
 
         return response()->json($query);
     }
 
-    
-    
+
+
     protected function respondWithToken($token)
     {
         return response()->json([
@@ -159,6 +158,5 @@ class DoadorController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth('ong')->factory()->getTTL() * 200
         ]);
-	}
-    
+    }
 }

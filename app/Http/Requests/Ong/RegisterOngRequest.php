@@ -66,7 +66,7 @@ class RegisterOngRequest extends FormRequest
             'rua.required' => 'O campo rua precisa ser preenchido',
             'rua.max' => 'O campo rua é muito longo',
             'cep.required' => 'O campo CEP precisa ser preenchido',
-            'cep.formato_cep' => 'O campo CEP nãp tem formato válido',
+            'cep.formato_cep' => 'O campo CEP não tem formato válido',
             'numero.required' => 'O campo numero precisa ser preenchido',
             'numero.integer' => 'O campo numero precisa ser um inteiro',
             'complemento.max' => 'O campo complemento é muito longo',
@@ -76,7 +76,7 @@ class RegisterOngRequest extends FormRequest
             'bairro.max' => 'O campo bairro é muito longo',
             'uf.required' => 'O campo UF precisa ser preenchido',
             'uf.integer' => 'O campo UF precisa ser inteiro',
-            'telefones.required' => 'O campo telefone precisa ser preenchido'
+            'telefone.required' => 'O campo telefone precisa ser preenchido'
         ];
     }
 }

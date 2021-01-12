@@ -30,7 +30,7 @@ class RegisterDoadorRequest extends FormRequest
             'cpf' => 'required|formato_cpf|cpf',
             'password' => 'required|confirmed',
             'genero' => "required|integer",
-            'telefones' => "required"
+            'telefone' => "required"
         ];
     }
 
@@ -50,9 +50,9 @@ class RegisterDoadorRequest extends FormRequest
             'cpf.cpf' => 'O campo cpf não é válido',
             'password.required' => 'O campo senha é necessário ser preenchido',
             'password.confirmed' => 'Os campos de senha não são iguais',
-            'genero.required' => 'É necessário preencher o campos gênero',
+            'genero.required' => 'É necessário preencher o campo gênero',
             'genero.integer' => 'O campo gênero precisa ser um inteiro',
-            'telefones.required' => 'Pelo menos um telefore precisa ser preenchido'
+            'telefone.required' => 'É necessário preencher o campo telefone'
         ];
     }
 }
