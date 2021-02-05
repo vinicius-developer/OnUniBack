@@ -34,8 +34,8 @@ class LoginOngRequest extends FormRequest
         return [
             'userkey.required' => 'O campo CNPJ precisa ser preenchido',
             'userkey.cnpj' => "CNPJ não é válido",
-            'userkey.formato_cnpj' => "O formato do cnpj não é válido",
-            'passoword.required' => "O campo password precisa ser preenchido",
+            'userkey.formato_cnpj' => "O formato do CNPJ não é válido",
+            'password.required' => "O campo senha precisa ser preenchido",
         ];
     }
 }

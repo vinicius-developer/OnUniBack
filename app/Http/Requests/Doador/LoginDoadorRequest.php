@@ -35,7 +35,7 @@ class LoginDoadorRequest extends FormRequest
             'userkey.required' => 'O campo CPF precisa ser preenchido',
             'userkey.cpf' => "CPF não é válido",
             'userkey.formato_cpf' => "O formato do CPF não é válido",
-            'passoword.required' => "O campo password precisa ser preenchido",
+            'password.required' => "O campo senha precisa ser preenchido",
         ];
     }
 }

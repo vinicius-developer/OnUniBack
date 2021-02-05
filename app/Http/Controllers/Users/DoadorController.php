@@ -12,7 +12,6 @@ use App\Http\Requests\Doador\LoginDoadorRequest;
 use App\Http\Requests\Doador\ImageDoadorRequest;
 use App\Utils\Tools\Validators;
 use App\Mail\RegisterDoadorMail;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Mail;
@@ -44,7 +43,7 @@ class DoadorController extends Controller
         $tbl_doadores->password = bcrypt($request->password);
         $tbl_doadores->cpf = $request->cpf;
         $tbl_doadores->id_generos = $request->genero;
-        $tbl_doadores->img_perfil = 'pothoPerfilDoador/fotoDoadorPadrao.png';
+        $tbl_doadores->img_perfil = 'pothoPerfilDoador/pothoDoador.png';
         $createDoador = $tbl_doadores->save();
 
         $tbl_telefones = new Telefone();
