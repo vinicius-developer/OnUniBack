@@ -53,7 +53,7 @@ class OngFavoritaController extends Controller
     {
         $users = $this->identify($id);
 
-        if(!empty($users['error'])) return response()->json([$users]);
+        if(!empty($users['error'])) return response()->json($users);
 
         $followFind = $this->followFind($users);
 

@@ -147,7 +147,7 @@ class OngController extends Controller
 
 		$ong = $this->infoOng($user->id_ongs);
 
-        return response()->json([$ong]);
+        return response()->json($ong);
     }
 	
 	public function index() 
@@ -173,7 +173,7 @@ class OngController extends Controller
         $ong = $this->infoOng($id);
 
         if($ong) {
-			return response()->json([$ong]);
+			return response()->json($ong);
 		} else {
 			return response()->json([
 				'message' => 'Esses dados não foram encontrados',

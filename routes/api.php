@@ -115,7 +115,7 @@ Route::prefix('actions')->middleware('check-token')->group(function () {
 	Route::prefix('follow')
 		->namespace('App\Http\Controllers\Actions')
 		->group(function () {
-			Route::get('switch/{id}', 'OngFavoritaController@switch');
+			Route::put('switch/{id}', 'OngFavoritaController@switch');
 			Route::get('index', 'OngFavoritaController@index');
 			Route::get('find/{id}', 'OngFavoritaController@find');
 		});
